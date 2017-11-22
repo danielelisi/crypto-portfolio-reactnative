@@ -1,7 +1,16 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import * as publicAPI from './api/bittrex/public'
 
 export default class App extends React.Component {
+  componentDidMount() {
+
+    let promise = publicAPI.getMarkets();
+
+    promise.then(response=>console.log(response)) 
+  
+  } 
+
   render() {
     return (
       <View style={styles.container}>
