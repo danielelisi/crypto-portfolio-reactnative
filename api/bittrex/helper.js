@@ -24,6 +24,7 @@ class helper {
             params['apikey'] = apiKey;
             params['nonce'] = helper._getNonce(); 
         }
+
         url += helper._formatParams(params);
 
         return url;
@@ -38,8 +39,10 @@ class helper {
             let index = 0;
             for( let key of Object.keys(params)) {
                 if (index !== 0)  { base+='&'}
-                base += `${key}=${params[key]}`; 
-                index++ 
+                if(params[key] !== null) {
+                    base += `${key}=${params[key]}`; 
+                    index++ 
+                }
             } 
         }  
 

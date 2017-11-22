@@ -4,6 +4,7 @@ import { View, Text, StyleSheet } from 'react-native';
 
 import * as publicAPI from '../api/bittrex/public';
 import * as market from '../api/bittrex/market';
+import * as account from '../api/bittrex/account'
 import creds from '../api/bittrex/creds'
 
 // create a component  
@@ -14,7 +15,7 @@ class TestView extends Component {
         let apiKey = creds.API_KEY;
         let apiSecret = creds.API_SECRET;
         
-        let promise = market.getOpenOrders(apiKey, apiSecret);
+        let promise = account.getOrderHistory(apiKey, apiSecret);
         
         // let promise = publicAPI.getMarketSummary('btc-ltc');
 

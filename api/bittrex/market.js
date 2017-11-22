@@ -7,6 +7,9 @@ const endpoints = {
     getOpenOrders: '/market/getopenorders'
 }
 
+// both api key and secret are needed for these API calls
+
+
 export function buyLimit(apiKey, apiSecret, market, quantity, rate) {
     /**
      * Used to place a buy order in a specific market. 
@@ -81,9 +84,8 @@ export function getOpenOrders(apiKey, apiSecret, market=null) {
      * market	    optional	a string literal for the market (ie. BTC-LTC)
     */
 
-    let params = {}
-    if (market !== null) {
-        params.market = market
+    let params = {
+        market
     }
 
     let apiCredentials = {
