@@ -9,37 +9,45 @@ class helper {
     static _apiVersion = 'v1.1'
 
     static hashSignature(uri, apiSecret) {
-        // return hmac('sha512', apiSecret)
-        //         .update(uri)
-        //         .digest('hex');
+        return hmac('sha512', apiSecret)
+                .update(uri)
+                .digest('hex');
     }
 
     static formatAPIUrl(endpoint, apiKey, params) {
 
-        let url = `${helper._baseUri}/${helper._apiVersion}/${endpoint}`;
+        let url = `${helper._baseUri}/${helper._apiVersion}${endpoint}`;
 
-        if(endpoint.includes('/public/')) {
-            return url;
+        let isPublic = endpoint.includes('/public/');
+
+        if(!isPublic) {
+            url += `?apikey=${apiKey}`;
         }
 
-        return url + helper._formatParams(apiKey, params)
+         url += helper._formatParams(params);
+
+         if(!isPublic) {
+            url += `${base}&nonce=${helper._getNonce()}`;
+         }
+
+         return url;
     }
 
-    static _formatParams(apiKey, params) {
+    static _formatParams(params) {
 
-        if (apiKey == null) {
-            return '';
-        }
-
-        let base = `?apikey=${apiKey}`;
-
+        let base = '?';
+  
         if(Object.keys(params).length > 0) {
+            let index = 0;
             for( let key of Object.keys(params)) {
-                base += `&${key}=${params[key]}`
-            }
-        }
+                if (index !== 0) { base+='&'}
+                base += `${key}=${params[key]}`; 
+                index++
+            } 
+        } 
 
-        return `${base}&nonce=${helper._getNonce()}`;
+        return base;
+
     }
 
     static _getNonce() {
@@ -54,10 +62,12 @@ class helper {
 
     static queryAPI(endpoint, params={}, apiKey=null) {
         
+        console.log(params)
         const apiUri = helper.formatAPIUrl(endpoint, apiKey, params);
+        console.log(apiUri)
         return helper.fetchAPIPromise(apiUri)
     }
-    
-}
+     
+} 
 
-export default helper;   
+export default helper;     
