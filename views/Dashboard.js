@@ -8,6 +8,8 @@ import {
 	Dimensions
 } from 'react-native';
 
+import Carousel from 'react-native-snap-carousel'
+
 import AreaSpline from '../components/charts/AreaSpline';
 import Pie from '../components/charts/Pie';
 import data from '../components/resources/data';
@@ -30,11 +32,15 @@ export default class Dashboard extends Component{
 	    this.state = { 
 	      activeIndex: 0,
 	      spendingsPerYear: data.spendingsPerYear,
-	    };
-	    this._onPieItemSelected = this._onPieItemSelected.bind(this);
+			};
+			
+			this._onPieItemSelected = this._onPieItemSelected.bind(this);
+			this._renderItem = this._renderItem.bind(this)
+			
 			this.getValue = this.getValue.bind(this)
-			this.colors = this._getRandomColors(data.spendingsLastMonth.length) 
 			this.renderList = this.renderList.bind(this)
+
+			this.colors = this._getRandomColors(data.spendingsLastMonth.length) 
 	}
 
 		_getRandomColors(count) {
@@ -49,36 +55,42 @@ export default class Dashboard extends Component{
 		}
 
 	  _onPieItemSelected(newIndex){
-	    this.setState({...this.state, activeIndex: newIndex, spendingsPerYear: data.spendingsPerYear});
+	    this.setState({...this.state, activeIndex: newIndex, spendingsPerYear: data.spendingsPerYear});   
 	  }
 
-		getValue(item) {
+		getValue(item) { 
 			return item.number
 		}
- 
+		
+		
+
+		_renderItem({item, index}) {
+			console.log(index)
+			return (
+				<View width={width-50} style={{backgroundColor: this.colors[index], height: 200, borderColor: 'black', borderRadius:5, borderWidth: 2}}> 
+					<Text>{item.name}</Text>    
+					 
+				</View>
+			)   
+		}  
 
 		renderList(data, setSelectedIndex) {
 			//getSelectedIndex : gets the current selectedIndex
 			//setSelectedIndex : sets the selectedIndex
 			// this._onPieItemSelected is the selecteditem function in the pie component 
 			
-			return (
-				<ScrollView horizontal={true} snapToAlignment={'center'} snapToInterval={1} pagingEnabled={true} contentContainerStyle={{flexGrow: 1}}>  
-				{   
-					data.map((item, index) =>     
-					{ 
-						var fontWeight = this.state.activeIndex == index ? 'bold' : 'normal';
-						return (   
-							<TouchableWithoutFeedback key={index} onPress={()=>setSelectedIndex(index)} >   
-								<View width={width}>   
-									<Text style={[styles.label, {backgroundColor: this.colors[index], color: 'white', fontWeight: fontWeight}]}>{item.name}</Text>    
-								</View>  
-							</TouchableWithoutFeedback>    
-						);	
-		
-					}) 
-				}
-				</ScrollView>  
+			let itemWidth = width - 50;
+			return (  
+				<Carousel 
+					ref={(c) => { this._carousel = c; }}
+					data={data}
+					renderItem={this._renderItem}
+					sliderWidth={data.length*itemWidth}
+					itemWidth={itemWidth} 
+					onSnapToItem={setSelectedIndex} 
+					sliderHeight={height/2}
+					itemHeight= {200} 
+				/>
 			)
 		} 
 
