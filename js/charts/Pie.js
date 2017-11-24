@@ -24,7 +24,7 @@ import * as shape from 'd3-shape';
 import * as d3Array from 'd3-array';
 import AnimShape from '../art/AnimShape';
 import Theme from '../theme';
-import CardComponent from '../components/CardComponent.js';
+import CardComponent from '../../components/CardComponent.js';
 
 const d3 = {
   scale,
