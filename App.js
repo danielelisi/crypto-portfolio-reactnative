@@ -1,26 +1,43 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import TestView from './views/TestView';
-import Dashboard from './views/Dashboard.js'
+import Dashboard from './views/Dashboard.js';
+import TestComponent from './components/TestComponent';
 
+import { DrawerNavigator } from 'react-navigation';
+
+
+const RootNavigator = DrawerNavigator(
+    {
+        Home:
+            {
+                screen: TestComponent,
+                navigationOptions: {
+                    drawerLabel: 'Home'
+                }
+            },
+        Dashboard:
+            {
+                screen: Dashboard,
+                navigationOptions: {
+                    drawerLabel: 'Dashboard'
+                }
+            }
+    },
+    // Drawer Navigator options
+    {
+        contentOptions: {
+            activeTintColor: '#4b79c1',
+            itemsContainerStyle: {
+                marginVertical: 24
+            },
+        }
+    }
+);
 
 export default class App extends React.Component {
 
- render() {
-    return (
-      <View style={styles.container}>
-        <Text>Open up App.js to start working on your app!</Text>
-        <Dashboard/>
-      </View>
-    );
-  }
+    render() {
+        return <RootNavigator />
+    }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
