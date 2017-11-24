@@ -24,6 +24,7 @@ import * as shape from 'd3-shape';
 import * as d3Array from 'd3-array';
 import AnimShape from '../art/AnimShape';
 import Theme from '../theme';
+import CardComponent from '../components/CardComponent.js';
 
 const d3 = {
   scale,
@@ -79,12 +80,12 @@ class Pie extends React.Component {
     var hightlightedArc = d3.shape.arc()
       .outerRadius(this.props.pieWidth/2 + 10)
       .padAngle(.05)
-      .innerRadius(30);
+      .innerRadius(150);
 
     var arc = d3.shape.arc()
       .outerRadius(this.props.pieWidth/2)
       .padAngle(.05)
-      .innerRadius(30);
+      .innerRadius(150);
 
     var arcData = arcs[index];
     var path = (this.state.highlightedIndex == index) ? hightlightedArc(arcData) : arc(arcData);
