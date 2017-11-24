@@ -17,7 +17,7 @@ type State = {
   spendingsPerYear: any
 }
 
-export default class PieChartComponent extends Component{
+export default class Dashboard extends Component{
 
 	state: State;
 
