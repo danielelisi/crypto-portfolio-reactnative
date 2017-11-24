@@ -1,5 +1,4 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
 import TestView from './views/TestView';
 import Dashboard from './views/Dashboard.js';
 import TestComponent from './components/TestComponent';
@@ -21,6 +20,13 @@ const RootNavigator = DrawerNavigator(
                 screen: Dashboard,
                 navigationOptions: {
                     drawerLabel: 'Dashboard'
+                }
+            },
+        TestView:
+            {
+                screen: TestView,
+                navigationOptions: {
+                    drawerLabel: 'Test View'
                 }
             }
     },

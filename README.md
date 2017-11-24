@@ -4,5 +4,7 @@
  - Feature 2: Digital recognition of any sort (image recognition, audio recognition, movement recognition).
  - Feature 3: Social media integration.
 
-Note:
-Run ```./node_modules/.bin/rn-nodeify --hack --install``` after running ```npm install --save```
+# Setup Environment
+
+1. Run `npm install` to install all project dependecies.  
+2. Run `npx rn-nodeify --hack` which allows react-native to run node core modules. (needed for HMAC hash)
