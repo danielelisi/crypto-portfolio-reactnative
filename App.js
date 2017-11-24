@@ -1,8 +1,4 @@
 import React from 'react';
-<<<<<<< HEAD
-import { StyleSheet, StatusBar, View } from 'react-native';
-=======
->>>>>>> develop
 import TestView from './views/TestView';
 import Dashboard from './views/Dashboard.js';
 import TestComponent from './components/TestComponent';
