@@ -1,16 +1,16 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, StatusBar, View } from 'react-native';
 import TestView from './views/TestView';
 import Dashboard from './views/Dashboard.js'
 
 
-export default class App extends React.Component {
+export default class App extends React.Component { 
 
  render() {
     return (
       <View style={styles.container}>
-        <Text>Open up App.js to start working on your app!</Text>
-        <Dashboard/>
+        <StatusBar hidden={true} />
+        <Dashboard/> 
       </View>
     );
   }

@@ -4,63 +4,102 @@ import {
   Text,
   ScrollView,
   TouchableWithoutFeedback,
-  View,
+	View,
+	Dimensions
 } from 'react-native';
 
-import AreaSpline from '../js/charts/AreaSpline';
-import Pie from '../js/charts/Pie';
-import Theme from '../js/theme';
-import data from '../resources/data';
+import AreaSpline from '../components/charts/AreaSpline';
+import Pie from '../components/charts/Pie';
+import data from '../components/resources/data';
+ 
+const randomcolor = require('randomcolor')
 
-type State = {
+type State = { 
   activeIndex: number,
   spendingsPerYear: any
 }
 
+const {width, height} = Dimensions.get('screen')
+
 export default class Dashboard extends Component{
 
 	state: State;
-
+ 
 	constructor(props){
 		super(props);
-	    this.state = {
+	    this.state = { 
 	      activeIndex: 0,
 	      spendingsPerYear: data.spendingsPerYear,
 	    };
 	    this._onPieItemSelected = this._onPieItemSelected.bind(this);
-	    this._shuffle = this._shuffle.bind(this);
+			this.getValue = this.getValue.bind(this)
+			this.colors = this._getRandomColors(data.spendingsLastMonth.length) 
+			this.renderList = this.renderList.bind(this)
 	}
 
+		_getRandomColors(count) {
+			 
+			let result = []
+
+			for(let x = 0 ; x < count ; x++) {
+				result.push(randomcolor())
+			}
+
+			return result;
+		}
+
 	  _onPieItemSelected(newIndex){
-	    this.setState({...this.state, activeIndex: newIndex, spendingsPerYear: this._shuffle(data.spendingsPerYear)});
+	    this.setState({...this.state, activeIndex: newIndex, spendingsPerYear: data.spendingsPerYear});
 	  }
 
-	  _shuffle(a) {
-	      for (let i = a.length; i; i--) {
-	          let j = Math.floor(Math.random() * i);
-	          [a[i - 1], a[j]] = [a[j], a[i - 1]];
-	      }
-	      return a;
-	  }
+		getValue(item) {
+			return item.number
+		}
+ 
+
+		renderList(data, setSelectedIndex) {
+			//getSelectedIndex : gets the current selectedIndex
+			//setSelectedIndex : sets the selectedIndex
+			// this._onPieItemSelected is the selecteditem function in the pie component 
+			
+			return (
+				<ScrollView horizontal={true} snapToAlignment={'center'} snapToInterval={1} pagingEnabled={true} contentContainerStyle={{flexGrow: 1}}>  
+				{   
+					data.map((item, index) =>     
+					{ 
+						var fontWeight = this.state.activeIndex == index ? 'bold' : 'normal';
+						return (   
+							<TouchableWithoutFeedback key={index} onPress={()=>setSelectedIndex(index)} >   
+								<View width={width}>   
+									<Text style={[styles.label, {backgroundColor: this.colors[index], color: 'white', fontWeight: fontWeight}]}>{item.name}</Text>    
+								</View>  
+							</TouchableWithoutFeedback>    
+						);	
+		
+					}) 
+				}
+				</ScrollView>  
+			)
+		} 
 
 	  render() {
-	    const height = 800;
-	    const width = 500;
-
-	    return (
-	      <ScrollView>
+			 
+	    return ( 
+	      
 	        <View style={styles.container} >
-	          <Text style={styles.chart_title}>Cryptocurrency</Text>
+	          <Text style={styles.chart_title}>Random Title</Text> 
 	          <Pie
-	            pieWidth={380}
-	            pieHeight={380}
+							highlightExpand={10}
+							thickness={50}
 	            onItemSelected={this._onPieItemSelected}
-	            colors={Theme.colors}
-	            width={width}
+	            colors={this.colors} 
+	            width={width} 
 	            height={height}
-	            data={data.spendingsLastMonth} />
-	        </View>
-	      </ScrollView>
+							data={data.spendingsLastMonth}
+							renderListCallback={this.renderList}
+							valueAccessor={this.getValue} />
+	        </View> 
+	      
 	      )
 	  }
 	}
@@ -68,17 +107,20 @@ export default class Dashboard extends Component{
 
 const styles = {
   container: {
-    backgroundColor:'whitesmoke',
-    marginTop: 21,
+		flex: 1,   
+    backgroundColor:'whitesmoke',  
   },
   chart_title : {
     paddingTop: 15,
-    textAlign: 'center',
+    textAlign: 'center',  
     paddingBottom: 5,
-    paddingLeft: 5,
     fontSize: 18,
-    backgroundColor:'white',
-    color: 'grey',
+    backgroundColor:'grey',
+    color: 'white',
     fontWeight:'bold',
+  },
+  label: {
+    fontSize: 25,
+		fontWeight: 'normal'
   }
 }
