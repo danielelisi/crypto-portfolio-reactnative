@@ -105,4 +105,4 @@ export function getMarketHistory(market) {
      * market	    required	a string literal for the market (ex: BTC-LTC)
      */
     return helper.queryAPI(endpoints.getMarketHistory);
-}
+} 
