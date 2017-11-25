@@ -1,47 +1,135 @@
-//import liraries
 import React, { Component } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  ScrollView,
+  TouchableWithoutFeedback,
+	View,
+	Dimensions
+} from 'react-native';
 
-import * as publicAPI from '../api/bittrex/public';
-import * as market from '../api/bittrex/market';
-import * as account from '../api/bittrex/account'
-import creds from '../api/bittrex/creds'
+import Carousel from 'react-native-snap-carousel'
 
-// create a component  
-class TestView extends Component {
+import AreaSpline from '../components/charts/AreaSpline';
+import Pie from '../components/charts/Pie';
+import data from '../components/resources/data';
+ 
+const randomcolor = require('randomcolor')
 
-    componentDidMount() {
-
-        let apiKey = creds.API_KEY;
-        let apiSecret = creds.API_SECRET;
-        
-        let promise = account.getOrderHistory(apiKey, apiSecret);
-        
-        // let promise = publicAPI.getMarketSummary('btc-ltc');
-
-        promise.then(response=>console.log(response))
-         .catch((reason) => console.log(reason)) 
-    
-    }
-
-    render() {
-        return (
-            <View>
-                <Text>TestView</Text>
-            </View>
-        );
-    }
+type State = { 
+  activeIndex: number,
+  spendingsPerYear: any
 }
 
-// define your styles
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#2c3e50',
-    },
-});
+const {width, height} = Dimensions.get('screen')
 
-//make this component available to the app
-export default TestView;
+export default class Dashboard extends Component{
+
+	state: State;
+ 
+	constructor(props){
+		super(props);
+	    this.state = { 
+	      activeIndex: 0,
+	      spendingsPerYear: data.spendingsPerYear,
+			};
+			
+			this._onPieItemSelected = this._onPieItemSelected.bind(this);
+			this._renderItem = this._renderItem.bind(this)
+			
+			this.getValue = this.getValue.bind(this)
+			this.renderList = this.renderList.bind(this)
+
+			this.colors = this._getRandomColors(data.spendingsLastMonth.length) 
+	}
+
+		_getRandomColors(count) {
+			 
+			let result = []
+
+			for(let x = 0 ; x < count ; x++) {
+				result.push(randomcolor())
+			}
+
+			return result;
+		}
+
+	  _onPieItemSelected(newIndex){
+	    this.setState({...this.state, activeIndex: newIndex, spendingsPerYear: data.spendingsPerYear});   
+	  }
+
+		getValue(item) { 
+			return item.number
+		}
+		
+		
+
+		_renderItem({item, index}) {
+			console.log(index)
+			return ( 
+				<View width={width-50} style={{backgroundColor: this.colors[index], borderColor: 'black', borderRadius:5, borderWidth: 2}}> 
+					<Text>{item.name}</Text>    
+					  
+				</View>
+			)   
+		}  
+
+		renderList(data, setSelectedIndex) {
+			//getSelectedIndex : gets the current selectedIndex
+			//setSelectedIndex : sets the selectedIndex
+			// this._onPieItemSelected is the selecteditem function in the pie component 
+			
+			let itemWidth = width - 50;  
+			return (  
+				<Carousel 
+					ref={(c) => { this._carousel = c; }}
+					data={data}
+					renderItem={this._renderItem}
+					sliderWidth={data.length*itemWidth}
+					itemWidth={itemWidth} 
+					onSnapToItem={setSelectedIndex}    
+					contentContainerStyle={{flex: 1}}
+				/>
+			)
+		} 
+
+	  render() {
+			 
+	    return ( 
+	        <View style={styles.container}>
+	          <Text style={styles.chart_title}>Random Title</Text> 
+	          <Pie
+							highlightExpand={10}
+							thickness={50}
+	            onItemSelected={this._onPieItemSelected}
+	            colors={this.colors} 
+	            width={width} 
+	            height={height}
+							data={data.spendingsLastMonth}
+							renderListCallback={this.renderList}
+							valueAccessor={this.getValue} />
+	        </View> 
+	      
+	      )
+	  }
+	}
+
+
+const styles = {
+  container: { 
+		flex: 1,   
+  },
+  chart_title : {
+    paddingTop: 15,
+    textAlign: 'center',  
+    paddingBottom: 5,
+    fontSize: 18,
+    backgroundColor:'grey',
+    color: 'white',
+    fontWeight:'bold',
+  },
+  label: {
+    fontSize: 25,
+		fontWeight: 'normal'
+  }
+}

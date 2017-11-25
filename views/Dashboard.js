@@ -67,10 +67,10 @@ export default class Dashboard extends Component{
 		_renderItem({item, index}) {
 			console.log(index)
 			return (
-				<View width={width-50} style={{backgroundColor: this.colors[index], height: 200, borderColor: 'black', borderRadius:5, borderWidth: 2}}> 
+				<View width={width-50} style={{backgroundColor: this.colors[index], height: 150, borderColor: 'black', borderRadius:5, borderWidth: 2}}> 
 					<Text>{item.name}</Text>    
 					 
-				</View>
+				</View> 
 			)   
 		}  
 

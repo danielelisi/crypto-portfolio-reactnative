@@ -10,14 +10,14 @@ const RootNavigator = DrawerNavigator(
     {
         Home:
             {
-                screen: TestComponent,
+                screen: Dashboard,
                 navigationOptions: {
                     drawerLabel: 'Home'
                 }
             },
         Dashboard:
             {
-                screen: Dashboard,
+                screen: Dashboard, 
                 navigationOptions: {
                     drawerLabel: 'Dashboard'
                 }

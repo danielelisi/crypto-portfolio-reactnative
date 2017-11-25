@@ -47,26 +47,32 @@ type Props = {
   valueAccessor: func
 };
 
-type State = {
-  highlightedIndex: number,
-};
+
 
 class Pie extends React.Component {
 
-  state: State;
+ 
 
   constructor(props: Props) {
     super(props);
-    this.state = { highlightedIndex: 0 };
+    this.state = { 
+      highlightedIndex: 0, 
+      pieLayoutHeight: 0,
+      pieLayoutWidth: 0
+    };
+
+    const margin = 20;
+
     this._createPieChart = this._createPieChart.bind(this);
     // this._value = this._value.bind(this);
     // this._label = this._label.bind(this);
     this._color = this._color.bind(this);
     this._onPieItemSelected = this._onPieItemSelected.bind(this);
 
+    this.pieLayout = this.pieLayout.bind(this); 
     //adjust the pie dimensions based on other properties
-    this.pieWidth = this.props.width - this.props.highlightExpand * 2 - styles.container.margin * 2;  
-    this.pieHeight = this.props.height / 2; //pie takes half of the screen 
+    this.pieRadius = Math.floor((this.props.width - this.props.highlightExpand * 2 - margin * 2)/2);  
+    // this.pieHeight = this.props.height / 2; //pie takes half of the screen 
   } 
 
   // methods used to tranform data into piechart:
@@ -78,26 +84,29 @@ class Pie extends React.Component {
   _color(index) { return this.props.colors[index]; }
 
   _createPieChart(index) {
-
-    const innerRadius = this.pieWidth/2 - this.props.thickness
+ 
+    console.log('creating pie chart with radius '+ this.pieRadius)
+    
+    const innerRadius = this.pieRadius - this.props.thickness
 
     var arcs = d3.shape.pie()
         .value(this.props.valueAccessor)
         (this.props.data);
 
     var hightlightedArc = d3.shape.arc()
-      .outerRadius(this.pieWidth/2 + 10) 
+      .outerRadius(this.pieRadius + this.props.highlightExpand) 
       .padAngle(.02)
-      .innerRadius(innerRadius); 
+      .innerRadius(innerRadius);  
 
     var arc = d3.shape.arc()
-      .outerRadius(this.pieWidth/2)
+      .outerRadius(this.pieRadius)
       .padAngle(.02)
       .innerRadius(innerRadius);
 
     var arcData = arcs[index];
     var path = (this.state.highlightedIndex == index) ? hightlightedArc(arcData) : arc(arcData);
 
+    console.log(path);
      return {
        path,
        color: this._color(index),
@@ -109,32 +118,44 @@ class Pie extends React.Component {
     this.props.onItemSelected(index); 
   }
 
- 
-  render() {
-    const margin = styles.container.margin;
-    const x = this.props.width / 2 ;
-    const y = this.pieHeight / 2 + margin;   
-  
-    return (
-      <View width={this.props.width} height={this.props.height}>
-        <Surface width={this.props.width} height={this.pieHeight}> 
-           <Group x={x} y={y}> 
-           { 
-              this.props.data.map( (item, index) =>
-              (<AnimShape
-                 key={'pie_shape_' + index}
-                 color={this._color(index)}
-                 d={ () => this._createPieChart(index)}
-              />) 
-              )
+  pieLayout(event) {
+    let {width, height} = event.nativeEvent.layout
+    console.log('changing layout')
+    this.setState({
+      pieLayoutWidth: width,
+      pieLayoutHeight: height
+    }, ()=> console.log(this.state.pieLayoutHeight+ ' ' + this.state.pieLayoutWidth))
+  }
+  render() { 
+
+    const pieMargin = styles.pieContainer.margin; 
+    const x = Math.floor(this.state.pieLayoutWidth / 2) ; 
+    const y = Math.floor(this.state.pieLayoutHeight / 2) ;   
+   
+    console.log('width is '+ this.state.pieLayoutWidth)
+    console.log('x is '+x+' and y is '+y); 
+    return ( 
+      <View style={styles.container}> 
+        <View style={styles.pieContainer} onLayout={this.pieLayout}>
+          <Surface width={this.state.pieLayoutWidth} height={this.state.pieLayoutHeight}>   
+            { this.state.pieLayoutWidth !== 0 && 
+              <Group x={x} y={y}> 
+              {  
+                  this.props.data.map( (item, index) => 
+                    (<AnimShape 
+                      key={'pie_shape_' + index}
+                      color={this._color(index)}
+                      d={ () => this._createPieChart(index)}
+                    />)
+                  ) 
+                }
+              </Group>
             }
-           </Group>
-        </Surface>
-        <View style={styles.pieList}>
-          {  
-            this.props.renderListCallback(this.props.data, this._onPieItemSelected)     
-          }
-        </View> 
+          </Surface> 
+        </View>
+        <View style={styles.pieInfo}> 
+          {this.props.renderListCallback(this.props.data, this._onPieItemSelected)}  
+        </View>
       </View>
     );
   }
@@ -142,13 +163,17 @@ class Pie extends React.Component {
 
 const styles = {
   container: {
-    margin: 20,
+    flex: 1,
+    flexDirection: 'column',  
+    justifyContent: 'center' 
   },
-  pieList: {
+  pieInfo: {
     flex: 1, 
-    backgroundColor: 'green',
-    justifyContent: 'center',
-    alignItems: 'center' 
+    alignItems: 'center'   
+  },  
+  pieContainer: {
+    flex: 2,
+    alignItems: 'center'
   }
 };
 
