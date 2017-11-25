@@ -1,17 +1,13 @@
 // @flow
 'use strict';
 
-var randomColor = require('randomcolor');
-
 import React from 'react';
 import {
   StyleSheet,
   Text,
   View,
   ART,
-  LayoutAnimation,
   Dimensions,
-  TouchableWithoutFeedback,
 } from 'react-native';
 
 const {
@@ -47,18 +43,15 @@ type Props = {
   valueAccessor: func
 };
 
-
-
 class Pie extends React.Component {
-
- 
 
   constructor(props: Props) {
     super(props);
     this.state = { 
       highlightedIndex: 0, 
       pieLayoutHeight: 0,
-      pieLayoutWidth: 0
+      pieLayoutWidth: 0,
+      total: 0
     };
 
     const margin = 20;
@@ -85,8 +78,6 @@ class Pie extends React.Component {
 
   _createPieChart(index) {
  
-    console.log('creating pie chart with radius '+ this.pieRadius)
-    
     const innerRadius = this.pieRadius - this.props.thickness
 
     var arcs = d3.shape.pie()
@@ -106,11 +97,10 @@ class Pie extends React.Component {
     var arcData = arcs[index];
     var path = (this.state.highlightedIndex == index) ? hightlightedArc(arcData) : arc(arcData);
 
-    console.log(path);
-     return {
-       path,
-       color: this._color(index),
-     };
+    return {
+      path,
+      color: this._color(index),
+    };
   }
 
   _onPieItemSelected(index) {
@@ -132,8 +122,6 @@ class Pie extends React.Component {
     const x = Math.floor(this.state.pieLayoutWidth / 2) ; 
     const y = Math.floor(this.state.pieLayoutHeight / 2) ;   
    
-    console.log('width is '+ this.state.pieLayoutWidth)
-    console.log('x is '+x+' and y is '+y); 
     return ( 
       <View style={styles.container}> 
         <View style={styles.pieContainer} onLayout={this.pieLayout}>
@@ -171,9 +159,8 @@ const styles = {
     flex: 1, 
     alignItems: 'center'   
   },  
-  pieContainer: {
-    flex: 2,
-    alignItems: 'center'
+  pieContainer: { 
+    flex: 2
   }
 };
 
