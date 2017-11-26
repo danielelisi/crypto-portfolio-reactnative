@@ -44,7 +44,7 @@ export function getTicker(market) {
 
     let params = {
         market
-    }
+    };
 
     return helper.queryAPI(endpoints.getTicker, params=params);
 }

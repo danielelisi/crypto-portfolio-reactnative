@@ -64,8 +64,7 @@ class helper {
         
         let isPublic = endpoint.includes('/public/')
         let headers = {}
-        const apiUri = helper.formatAPIUrl(endpoint, params, 
-                                apiCredentials===null?null : apiCredentials.apiKey);
+        const apiUri = helper.formatAPIUrl(endpoint, params, (apiCredentials === null ? null : apiCredentials.apiKey));
         console.log(apiUri)
          
         if (!isPublic) {
