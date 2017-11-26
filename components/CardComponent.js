@@ -7,7 +7,6 @@ export default class CardComponent extends Component{
 	constructor(props){
 		super(props);
 		this.state = {
-		    usdValue: 0
         }
 	}
  
