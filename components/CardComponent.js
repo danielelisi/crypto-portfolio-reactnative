@@ -4,35 +4,33 @@ import {Text, View, Image, StyleSheet} from 'react-native';
 
 
 export default class CardComponent extends Component{
-
-
 	constructor(props){
 		super(props);
-		this.state = {}
+		this.state = {
+        }
 	}
  
-	render() { 
-
+	render() {
 		const location = this.props.iconLocation;
+        let {data} = this.props;
 
 		return (  
 			<View 
 			style={[styles.container, {backgroundColor:this.props.color}]}>
 				<Text style={styles.header}>{this.props.data.longname}</Text>
 				<View style={{flex: 1, flexDirection: 'row', backgroundColor: 'white'}}>
-					<View style={{flex:1, justifyContent:'center', alignItems:'center'}}>   
+					<View style={{flex:1, justifyContent:'center', alignItems:'center', paddingLeft: 4}}>
 						<Image 
-						source={this.props.data.icon} resizeMode={'contain'}    
+						source={data.icon} resizeMode={'contain'} style={styles.coinIcon}
 						/>
 					</View> 
 					<View style={styles.info}>  
-						<Text>Holdings: {this.props.data.holdings} {this.props.data.currency}</Text>   
-						<Text>Last: {this.props.data.last} {this.props.data.currency}</Text>   
-						<Text>Ask: {this.props.data.ask} {this.props.data.currency}</Text>   
-						<Text>Bid: {this.props.data.bid} {this.props.data.currency}</Text> 
-					</View>  
-				</View>   
-				    
+						<Text>Coin Holdings: {data.holdings.toFixed(6)} {data.currency}</Text>
+                        <Text>Price: {data.price.toFixed(6)} BTC</Text>
+						<Text>BTC Value: {data.btcPrice.toFixed(6)} BTC</Text>
+						<Text>USD Value: ${data.usdValue.toFixed(2)}</Text>
+					</View>
+				</View>
 			</View>   
 		);
 	}  
@@ -51,8 +49,9 @@ const styles = StyleSheet.create({
 		padding: 5,
 		color: '#efeeee'
 	},    
-	icon: {
- 
+	coinIcon: {
+        height:100,
+        width: 100
 	},
 	info: {
 		flex: 2,
