@@ -108,6 +108,17 @@ export default class Dashboard extends Component{
         return await this.getBtcValue();
     }
 
+	getCurrencies() {
+		return new Promise(resolve=> {
+			pub.getCurrencies()
+				.then(response=>resolve(response.result))
+				.catch( err=> console.log(err))
+		})
+	}
+	async queryCurrencies() {
+		return await this.getCurrencies();
+	}
+
     getMarketSummaries() {
         /*
          * Get the whole market with one API call then filter it in compute balances
@@ -119,20 +130,22 @@ export default class Dashboard extends Component{
         });
     }
 
-    computeBalances(balances, btcPrice) {
+	computeBalances(balances, btcPrice) {
         let data = [];
         let counter = 0;
 
         return new Promise( async resolve => {
             let marketSummaries =  await this.getMarketSummaries();
+			let currencies = await this.getCurrencies();
 
             balances.forEach( (balance, index) => {
-                let marketName = (balance.Currency === 'USDT' || balance.Currency === 'BTC') ? 'USDT-BTC' : 'BTC-'+ balance.Currency ;
-                let holdings = balance.Available;
+				
+				let currencyInfo = currencies.find(currency=> currency.Currency === balance.Currency)
+				let marketName = (balance.Currency === 'USDT' || balance.Currency === 'BTC') ? 'USDT-BTC' : 'BTC-'+ balance.Currency ; ;
+                let holdings = balance.Available; 
                 let icon = cryptoIcons[balance.Currency];
 
                 // search for the coin in the market summary
-                console.log(`Market summary for ${balance.Currency}`);
                 let coinMarket = marketSummaries.find( market => market.MarketName === marketName);
                 console.log(coinMarket);
 
@@ -151,7 +164,7 @@ export default class Dashboard extends Component{
 					price: coinMarket.Last,
 					btcPrice: btcTotalValue,
 					usdValue: usdTotalValue,
-					longname: bitcoin.names[balance.Currency], 
+					longname: currencyInfo.CurrencyLong, 
 					icon: icon
 				});
                 // if(counter === balances.length-1) {
