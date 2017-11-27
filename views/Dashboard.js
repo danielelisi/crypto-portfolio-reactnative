@@ -167,8 +167,8 @@ export default class Dashboard extends Component{
     async componentDidMount() {
 
         //toggle the shake event listener
-        this._toggleAccel();
-        this._accelSetUpdateInterval(1000);
+        // this._toggleAccel();
+        // this._accelSetUpdateInterval(1000);
 
         let btcPrice = await this.queryBtcValue();
         this.setState({
@@ -202,9 +202,9 @@ export default class Dashboard extends Component{
 
     }
 
-    componentWillUnmount() {
-        this._unsubscribe()
-    }
+    // componentWillUnmount() {
+    //     this._unsubscribe()
+    // }
 
     /*************************************
      * PIE CHART RELATED FUNCTIONS

@@ -47,11 +47,13 @@ class Pie extends React.Component {
 
   constructor(props: Props) {
     super(props);
+
+    let total = this._computeTotal()
     this.state = { 
       highlightedIndex: 0, 
       pieLayoutHeight: 0,
       pieLayoutWidth: 0,
-      total: 0
+      total: total
     };
 
     const margin = 20;
@@ -67,6 +69,17 @@ class Pie extends React.Component {
     this.pieRadius = Math.floor((this.props.width - this.props.highlightExpand * 2 - margin * 2)/2);  
     // this.pieHeight = this.props.height / 2; //pie takes half of the screen 
   } 
+
+  _computeTotal() {
+
+    let result = 0
+
+    this.props.data.forEach((item) => {
+      result += this.props.valueAccessor(item)
+    })
+
+    return result;
+  }
 
   // methods used to tranform data into piechart:
   // TODO: Expose them as part of the interface
@@ -121,11 +134,21 @@ class Pie extends React.Component {
     const pieMargin = styles.pieContainer.margin; 
     const x = Math.floor(this.state.pieLayoutWidth / 2) ; 
     const y = Math.floor(this.state.pieLayoutHeight / 2) ;   
-   
+    const item = this.props.data[this.state.highlightedIndex]
+    const percentage = this.props.valueAccessor(item) / this.state.total*100;
+    const circleDiameter = (this.pieRadius - this.props.thickness)*2
+
     return ( 
+      
       <View style={styles.container}> 
         <View style={styles.pieContainer} onLayout={this.pieLayout}>
-          <Surface width={this.state.pieLayoutWidth} height={this.state.pieLayoutHeight}>   
+        <View style={[styles.innerView, 
+          {width: circleDiameter, height: circleDiameter, borderRadius:circleDiameter/2, 
+          backgroundColor:this._color(this.state.highlightedIndex)}]}>
+          <Text style={styles.innerTextLarge}>{percentage.toFixed(0)}</Text>
+          <Text style={styles.innerTextSmall}>PERCENT</Text>
+        </View>
+        <Surface width={this.state.pieLayoutWidth} height={this.state.pieLayoutHeight}>   
             { this.state.pieLayoutWidth !== 0 && 
               <Group x={x} y={y}> 
               {  
@@ -153,14 +176,32 @@ const styles = {
   container: {
     flex: 1,
     flexDirection: 'column',  
-    justifyContent: 'center' 
+    justifyContent: 'center' ,
   },
   pieInfo: {
     flex: 1, 
     alignItems: 'center'   
   },  
   pieContainer: { 
-    flex: 2
+    flex: 2,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  innerView: {
+    position: 'absolute',
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+
+  innerTextLarge: {
+    fontSize: 64,
+    fontWeight: 'bold',
+    color: '#efeeee'
+  },
+  innerTextSmall: {
+    fontSize: 16,
+    color: '#efeeee'
   }
 };
 
