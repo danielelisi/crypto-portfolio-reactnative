@@ -50,8 +50,8 @@ const styles = StyleSheet.create({
 		color: '#efeeee'
 	},    
 	coinIcon: {
-        height:100,
-        width: 100
+        height: 75,
+        width: 75
 	},
 	info: {
 		flex: 2,

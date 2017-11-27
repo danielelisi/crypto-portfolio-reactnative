@@ -16,25 +16,28 @@ export default class TwitterNews extends Component {
         super();
         this.state = {
             twitterData: null
-        }
+        };
+
+        this.twitterClient = twitter(twitterCredentials);
     }
 
-    componentDidMount() {
-        // fetch tweets
-        const client = twitter(twitterCredentials);
-
-        client.rest.get('search/tweets', {
+    _fetchTweets = () => {
+        return this.twitterClient.rest.get('search/tweets', {
             q: '%23cryptocurrency', // search this hashtag
             lang: 'en'
         })
-        .then(result => this.setState({twitterData: result.statuses}) )
-        .catch(err => console.log('Error:' + err))
-
-    }
+    };
 
     renderTweets() {
         // iterate trough the tweets list and render each tweet as a component
         return this.state.twitterData.map( tweet => <TweetComponent key={tweet.id} tweet={tweet} /> )
+    }
+
+    componentDidMount() {
+        // fetch tweets
+        this._fetchTweets()
+            .then(result => this.setState({twitterData: result.statuses}) )
+            .catch(err => console.log('Error:' + err))
     }
 
     render() {
