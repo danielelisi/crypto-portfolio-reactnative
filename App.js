@@ -2,6 +2,7 @@ import React from 'react';
 import TestView from './views/TestView';
 import Dashboard from './views/Dashboard.js';
 import TestComponent from './components/TestComponent';
+import TwitterNews from './views/TwitterNews';
 
 import { DrawerNavigator } from 'react-navigation';
 
@@ -15,11 +16,11 @@ const RootNavigator = DrawerNavigator(
                     drawerLabel: 'Home'
                 }
             },
-        Dashboard:
+        TwitterNews:
             {
-                screen: Dashboard, 
+                screen: TwitterNews,
                 navigationOptions: {
-                    drawerLabel: 'Dashboard'
+                    drawerLabel: 'News'
                 }
             },
         TestView:

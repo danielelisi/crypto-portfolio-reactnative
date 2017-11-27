@@ -48,5 +48,6 @@ export const names = {
     OMG: 'OmiseGO',
     NEO: 'Neo',
     BTG: 'Bitcoin Gold',
-    NAV: 'NAVCoin'
+    NAV: 'NAVCoin',
+    POWR: 'Power Ledger'
 }

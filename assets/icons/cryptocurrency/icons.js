@@ -40,5 +40,6 @@ export default cryptoIcons = {
     OMG: require('./omg.png'),  
     NEO: require('./neo.png'),  
     BTG: require('./0x.png'),  
-    NAV: require('./0x.png') 
+    NAV: require('./0x.png'),
+    POWR: require('./0x.png')
 }
