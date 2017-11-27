@@ -191,7 +191,8 @@ const styles = {
     position: 'absolute',
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    zIndex: 2
   },
 
   innerTextLarge: {
