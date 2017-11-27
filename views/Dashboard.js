@@ -19,13 +19,13 @@ import * as market from '../api/bittrex/market'
 import * as pub from '../api/bittrex/public'
 import * as bitcoin from '../api/bittrex/bitcoin'
 import creds from '../api/bittrex/creds';
-import cryptoIcons from '../assets/icons/cryptocurrency/icons'
+// import cryptoIcons from '../assets/icons/cryptocurrency/icons'
 import { Accelerometer } from 'expo'
 
 const {width, height} = Dimensions.get('screen');
 
 export default class Dashboard extends Component{
-
+ 
     constructor(props){
         super(props);
         this.state = {
@@ -144,7 +144,7 @@ export default class Dashboard extends Component{
 				let currencyInfo = currencies.find(currency=> currency.Currency === balance.Currency)
 				let marketName = (balance.Currency === 'USDT' || balance.Currency === 'BTC') ? 'USDT-BTC' : 'BTC-'+ balance.Currency ; ;
                 let holdings = balance.Available; 
-                let icon = cryptoIcons[balance.Currency];
+                // let icon = cryptoIcons[balance.Currency];
 
                 // search for the coin in the market summary
                 let coinMarket = marketSummaries.find( market => market.MarketName === marketName);
