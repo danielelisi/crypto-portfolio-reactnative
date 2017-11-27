@@ -50,3 +50,13 @@ export const names = {
     BTG: 'Bitcoin Gold',
     NAV: 'NAVCoin'
 }
+
+export function getCoinList() {
+    let promise = fetch('https://www.cryptocompare.com/api/data/coinlist/')
+            .then(response => response.json())
+            .catch(err=>console.log(err))
+
+    return new Promise(resolve=>{
+        promise.then(response=>resolve(response))
+    })
+}

@@ -36,7 +36,8 @@ export default class Dashboard extends Component{
             theme: 'red',
             currencyInfo: [],
             totalBtcPortfolio: 0,
-            btcPrice: 0,
+			btcPrice: 0,
+			coinList:[],
             /** SHAKE EVENT RELATED STATES */
             mAccel: 0.0,
             mAccelCurrent: 9.8
@@ -129,9 +130,8 @@ export default class Dashboard extends Component{
             balances.forEach( (balance, index) => {
                 let marketName = (balance.Currency === 'USDT' || balance.Currency === 'BTC') ? 'USDT-BTC' : 'BTC-'+ balance.Currency ;
                 let holdings = balance.Available;
-                let icon = cryptoIcons[balance.Currency];
 
-                // search for the coin in the market summary
+				// search for the coin in the market summary
                 console.log(`Market summary for ${balance.Currency}`);
                 let coinMarket = marketSummaries.find( market => market.MarketName === marketName);
                 console.log(coinMarket);
@@ -144,7 +144,15 @@ export default class Dashboard extends Component{
                     btcTotalValue = holdings * coinMarket.Last;
                     usdTotalValue = btcTotalValue * btcPrice;
                 }
+				
+				let coin = this.state.coinList.Data[balance.Currency]
+				let icon = {
+					uri : `${this.state.coinList.BaseImageUrl}${coin.ImageUrl}`
+				}
 
+				if (coin===null) {
+					icon = require('../assets/icons/cryptocurrency/0x.png')
+				}
 				data.push({   
 					currency: balance.Currency, 
 					holdings: holdings,
@@ -170,9 +178,13 @@ export default class Dashboard extends Component{
         // this._toggleAccel();
         // this._accelSetUpdateInterval(1000);
 
-        let btcPrice = await this.queryBtcValue();
+		let btcPrice = await this.queryBtcValue();
+		let coinList = await bitcoin.getCoinList()
+		
+
         this.setState({
-            btcPrice
+			btcPrice,
+			coinList
         });
 
         account.getBalances(creds.API_KEY, creds.API_SECRET)
