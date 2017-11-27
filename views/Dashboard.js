@@ -20,7 +20,6 @@ import * as pub from '../api/bittrex/public'
 import * as bitcoin from '../api/bittrex/bitcoin'
 import creds from '../api/bittrex/creds';
 // import cryptoIcons from '../assets/icons/cryptocurrency/icons'
-import { Accelerometer } from 'expo'
 
 const {width, height} = Dimensions.get('screen');
 
@@ -38,9 +37,6 @@ export default class Dashboard extends Component{
             totalBtcPortfolio: 0,
 			btcPrice: 0,
 			coinList:[],
-            /** SHAKE EVENT RELATED STATES */
-            mAccel: 0.0,
-            mAccelCurrent: 9.8
         };
 
         this._onPieItemSelected = this._onPieItemSelected.bind(this);
@@ -51,47 +47,6 @@ export default class Dashboard extends Component{
 
         this.horizontalMargin = 25;
         this.verticalMargin = 10;
-    }
-
-    /*************************************
-     * SHAKE EVENT RELATED FUNCTIONS
-     ************************************/
-    _toggleAccel = () => {
-        console.log('toggling shake event')
-
-        if(this._subscription) {
-            console.log('untoggling shake event')
-            this._unsubscribe();
-        } else {
-            console.log('turning on shake event')
-            this._subscribe()
-        }
-    };
-
-    _accelSetUpdateInterval = (interval) => {
-        Accelerometer.setUpdateInterval(interval)
-    };
-
-    _subscribe = () => {
-        this._subscription = Accelerometer.addListener(accelerometerData=> {
-            let {x, y, z} = accelerometerData;
-            let mAccelLast = this.state.mAccelCurrent;
-            let mAccelCurrent = Math.sqrt((x*x + y*y + z*z));
-            let delta = mAccelCurrent - mAccelLast;
-            let mAccel = this.state.mAccel * 0.9 + delta;
-            this.setState({mAccelCurrent, mAccel}, ()=>{
-                if (mAccel >= 1) {
-                    console.log('shake!!')
-                    //do something here
-                }
-            })
-        })
-        console.log('done?')
-    };
-
-    _unsubscribe = () => {
-        this._subscription && this._subscription.remove();
-        this._subscription = null
     }
 
     /*************************************
@@ -187,10 +142,6 @@ export default class Dashboard extends Component{
     }
 
     async componentDidMount() {
-
-        //toggle the shake event listener
-        // this._toggleAccel();
-        // this._accelSetUpdateInterval(1000);
 
 		let btcPrice = await this.queryBtcValue();
 		let coinList = await bitcoin.getCoinList()
