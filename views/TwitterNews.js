@@ -52,7 +52,9 @@ export default class TwitterNews extends Component {
             this.setState({mAccelCurrent, mAccel}, ()=>{
                 if (mAccel >= 1) {
                     console.log('shake!!')
-                    //do something here
+                    this._fetchTweets()
+                    .then (response => this.setState({twitterData:response.statuses}))
+                    .catch(err => console.log('Error:' + err));
                 }
             })
         })
@@ -64,6 +66,17 @@ export default class TwitterNews extends Component {
         this._subscription = null
     }
 
+    _fetchTweets = () => {
+        return this.twitterClient.rest.get('search/tweets', {
+            q: '%23cryptocurrency', // search this hashtag
+            lang: 'en'
+        })
+    };
+
+    renderTweets() {
+        // iterate trough the tweets list and render each tweet as a component
+        return this.state.twitterData.map( tweet => <TweetComponent key={tweet.id} tweet={tweet} /> )
+    }
 
     componentDidMount() {
 
@@ -71,21 +84,12 @@ export default class TwitterNews extends Component {
         this._toggleAccel();
         this._accelSetUpdateInterval(512);
 
+        this.twitterClient = twitter(twitterCredentials);
+
         // fetch tweets
-        const client = twitter(twitterCredentials);
-
-        client.rest.get('search/tweets', {
-            q: '%23cryptocurrency', // search this hashtag
-            lang: 'en'
-        })
-        .then(result => this.setState({twitterData: result.statuses}) )
-        .catch(err => console.log('Error:' + err))
-
-    }
-
-    renderTweets() {
-        // iterate trough the tweets list and render each tweet as a component
-        return this.state.twitterData.map( tweet => <TweetComponent key={tweet.id} tweet={tweet} /> )
+        this._fetchTweets()
+            .then(result => this.setState({twitterData: result.statuses}) )
+            .catch(err => console.log('Error:' + err))
     }
 
     render() {
