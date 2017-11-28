@@ -29,6 +29,7 @@ export default class TweetComponent extends Component {
                 <View style={styles.textContainer}>
                     <Text>{tweet.text}</Text>
                 </View>
+                
             </View>
         )
     }

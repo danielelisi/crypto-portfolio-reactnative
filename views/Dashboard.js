@@ -6,6 +6,7 @@ import {
     Dimensions,
     ActivityIndicator
 } from 'react-native';
+import Icon from 'react-native-vector-icons/Zocial';
 
 import Carousel from 'react-native-snap-carousel'
 
@@ -22,6 +23,9 @@ import creds from '../api/bittrex/creds';
 // import cryptoIcons from '../assets/icons/cryptocurrency/icons'
 
 const {width, height} = Dimensions.get('screen');
+
+// icons to be used
+const usdIcon = (<Icon name="bitcoin" size={30} color="#fff" />);
 
 export default class Dashboard extends Component{
  
@@ -293,4 +297,3 @@ const styles = {
         fontWeight: 'normal'
     }
 }
-
