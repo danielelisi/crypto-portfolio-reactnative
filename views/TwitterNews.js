@@ -6,7 +6,7 @@ import {
     ScrollView,
     ActivityIndicator
 } from 'react-native';
-
+import DropdownAlert from 'react-native-dropdownalert';
 import twitter from 'react-native-twitter';
 import twitterCredentials from '../api/twitter/credentials';
 import TweetComponent from "../components/TweetComponent";
@@ -19,7 +19,10 @@ export default class TwitterNews extends Component {
             twitterData: null,
             /** SHAKE EVENT RELATED STATES */
             mAccel: 0.0,
-            mAccelCurrent: 9.8
+            mAccelCurrent: 9.8,
+            /** ALERT STATE */
+            alert: {},
+
         }
     }
 
@@ -53,7 +56,36 @@ export default class TwitterNews extends Component {
                 if (mAccel >= 1) {
                     console.log('shake!!')
                     this._fetchTweets()
-                    .then (response => this.setState({twitterData:response.statuses}))
+                    .then (response => {
+                        //check if there are new tweets, if first items in the array and response doesn't match, append the items to the array
+                        if(response.statuses[0].text != this.state.twitterData[0].text){
+                            this.setState({
+                                twitterData:response.statuses,
+                                alert: {
+                                    key: 0, 
+                                    backgroundColor: '#32A54A', 
+                                    type: 'success',
+                                    title: 'Refreshed',
+                                    message: 'Your news feed is now up to date.'
+                                }
+                            },() => this.showAlert(this.state.alert));
+                        } else {
+                            console.log('Alert!!!');
+
+                            //implement alert popup
+                            //set the alert type
+                            this.setState({
+                                alert: {
+                                    key: 0, 
+                                    backgroundColor: '#2B73B6', 
+                                    type: 'info',
+                                    title: 'No new tweets',
+                                    message: 'You are currently up to date. Please refresh later to check for updates.'
+                                }
+                            },() => this.showAlert(this.state.alert));
+
+                        }
+                    })
                     .catch(err => console.log('Error:' + err));
                 }
             })
@@ -66,12 +98,32 @@ export default class TwitterNews extends Component {
         this._subscription = null
     }
 
+    /*************************************
+     * ALERT RELATED FUNCTIONS
+     *************************************/
+
+    showAlert(item) {
+        if (item.type == 'close') {
+          this.closeAlert()
+        } else {
+          const title = item.title
+          this.dropdown.alertWithType(item.type, title, item.message)
+        }
+      }
+    closeAlert = () => {
+        this.dropdown.close()
+      }
+    onClose(data) {
+        console.log(data);
+      }
+    
+
     _fetchTweets = () => {
         return this.twitterClient.rest.get('search/tweets', {
             q: '%23cryptocurrency', // search this hashtag
             lang: 'en'
         })
-    };
+    }
 
     renderTweets() {
         // iterate trough the tweets list and render each tweet as a component
@@ -94,14 +146,26 @@ export default class TwitterNews extends Component {
 
     render() {
         return(
-            <ScrollView
+            <View
                 style={styles.twitterContainer}
             >
-                {this.state.twitterData !== null
-                    ? this.renderTweets()
-                    : <ActivityIndicator />
-                }
-            </ScrollView>
+                <ScrollView>
+                    {this.state.twitterData !== null
+                        ? this.renderTweets()
+                        : <ActivityIndicator />
+                    }
+                </ScrollView>
+
+                <DropdownAlert
+                  ref={(ref) => this.dropdown = ref}
+                  containerStyle={{
+                    backgroundColor: '#2B73B6'
+                  }}
+                  showCancel={true}
+                  onClose={(data) => this.onClose(data)}
+                  onCancel={(data) => this.onClose(data)}
+                />
+            </View>
         )
     }
 }
