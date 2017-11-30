@@ -6,9 +6,11 @@ import {
     Dimensions,
     ActivityIndicator
 } from 'react-native';
-import Icon from 'react-native-vector-icons/Zocial';
+import Zocial from 'react-native-vector-icons/Zocial';
+import FAIcon from 'react-native-vector-icons/FontAwesome'
 
-import Carousel from 'react-native-snap-carousel'
+
+import Carousel from 'react-native-snap-carousel';
 
 import AreaSpline from '../components/charts/AreaSpline';
 import Pie from '../components/charts/Pie';
@@ -23,9 +25,6 @@ import creds from '../api/bittrex/creds';
 // import cryptoIcons from '../assets/icons/cryptocurrency/icons'
 
 const {width, height} = Dimensions.get('screen');
-
-// icons to be used
-const usdIcon = (<Icon name="bitcoin" size={30} color="#fff" />);
 
 export default class Dashboard extends Component{
  
@@ -240,12 +239,25 @@ export default class Dashboard extends Component{
      * RENDER STARTS HERE
      ************************************/
     render() {
-
         return (
             <View style={styles.container} >
-                <Text style={styles.chart_title}>Dashboard</Text>
-                <Text style={styles.portfolioValue}>Total BTC: {this.state.totalBtcPortfolio.toFixed(8)}</Text>
-                <Text style={styles.portfolioValue}>Total USD: ${(this.state.totalBtcPortfolio * this.state.btcPrice).toFixed(2)}</Text>
+                <View style={styles.outerPortfolioValueContainer}>
+                    <View style={styles.innerPortfolioValueContainer}>
+                        <View style={styles.innerContainer}>
+                        <Zocial name="bitcoin" size={18} color="#fff" style={styles.portfolioValueIcons}/>
+                        <Text style={styles.portfolioLabel}>Total BTC </Text>
+                        </View>
+                        <Text style={styles.portfolioValue}>{this.state.totalBtcPortfolio.toFixed(8)}</Text>
+                    </View>
+                    <View style={styles.innerPortfolioValueContainer}>
+                        <View style={styles.innerContainer}>
+                        <FAIcon name="money" size={18} color="#fff" style={styles.portfolioValueIcons}/>
+                        <Text style={styles.portfolioLabel}>Total USD </Text>
+                        </View>
+                        <Text style={styles.portfolioValue}>${(this.state.totalBtcPortfolio * this.state.btcPrice).toFixed(2)}</Text>
+                    </View>
+                </View>
+
                 <View style={styles.PieContainer} >
                     {this.state.data.length === 0 && <ActivityIndicator color={'green'} size={'large'}/>}
                     {this.state.data.length !== 0 &&
@@ -271,26 +283,51 @@ export default class Dashboard extends Component{
 const styles = {
     container: {
         flex: 1,
-        backgroundColor:'#dedede',
-        marginTop: 24,
+        backgroundColor: '#191919',
+        marginTop: 24
     },
     PieContainer: {
         flex: 1,
         justifyContent: 'center'
     },
     chart_title : {
-        paddingTop: 15,
+        paddingTop: 10,
         textAlign: 'center',
-        paddingBottom: 5,
+        paddingBottom: 10,
         fontSize: 18,
         backgroundColor:'black',
         color: 'white',
         fontWeight:'bold',
+    },   
+    portfolioValueIcons: {
+        marginRight: 5,
     },
-    portfolioValue: {
+    portfolioLabel: {
         textAlign: 'center',
         fontSize: 16,
-        paddingTop:8
+        fontWeight: '100',
+        color: '#ffffff',
+    },    
+    portfolioValue: {
+        textAlign: 'center',
+        fontSize: 35,
+        fontWeight: 'bold',
+        color: '#ffffff'
+    }, 
+    innerPortfolioValueContainer: {
+        padding: 8,
+        alignItems: 'flex-start',
+        justifyContent: 'center',
+        flexDirection: 'column'
+    },
+    outerPortfolioValueContainer: {
+        flexDirection: 'row',
+        backgroundColor: '#000'
+    },
+    valueContainer: {
+        flexDirection: 'row',
+        justifyContent:'center',
+        alignItems: 'center'
     },
     label: {
         fontSize: 25,

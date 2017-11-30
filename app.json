@@ -8,9 +8,9 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "primaryColor": "#cccccc",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/CPLogo.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/loading_screen.gif",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
