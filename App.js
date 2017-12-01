@@ -3,6 +3,7 @@ import TestView from './views/TestView';
 import Dashboard from './views/Dashboard.js';
 import TestComponent from './components/TestComponent';
 import TwitterNews from './views/TwitterNews';
+import Settings from './views/Settings'
 
 import { DrawerNavigator } from 'react-navigation';
 
@@ -23,11 +24,11 @@ const RootNavigator = DrawerNavigator(
                     drawerLabel: 'News'
                 }
             },
-        TestView:
+        Settings:
             {
-                screen: TestView,
+                screen: Settings,
                 navigationOptions: {
-                    drawerLabel: 'Test View'
+                    drawerLabel: 'Settings'
                 }
             }
     },
