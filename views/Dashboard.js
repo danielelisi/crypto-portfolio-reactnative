@@ -132,7 +132,7 @@ export default class Dashboard extends Component{
 
 		let btcPrice = await this.queryBtcValue();
 		let coinList = await bitcoin.getCoinList()
-		
+
 
         this.setState({
 			btcPrice,
@@ -227,18 +227,18 @@ export default class Dashboard extends Component{
             <View style={styles.container} >
                 <View style={styles.outerPortfolioValueContainer}>
                     <View style={styles.innerPortfolioValueContainer}>
-                        <View style={styles.innerContainer}>
-                        <Zocial name="bitcoin" size={18} color="#fff" style={styles.portfolioValueIcons}/>
-                        <Text style={styles.portfolioLabel}>Total BTC </Text>
+                        <View style={[styles.innerContainer, {paddingBottom:0}]}>
+                        <Zocial name="bitcoin" size={15} color="#fff" style={styles.portfolioValueIcons}/>
+                        <Text style={[styles.portfolioLabel,{fontSize: width/27}]}>Total BTC </Text>
                         </View>
-                        <Text style={styles.portfolioValue}>{this.state.totalBtcPortfolio.toFixed(8)}</Text>
+                        <Text style={[styles.portfolioValue, {fontSize: width/12}]}>{this.state.totalBtcPortfolio.toFixed(8)}</Text>
                     </View>
                     <View style={styles.innerPortfolioValueContainer}>
                         <View style={styles.innerContainer}>
                         <FAIcon name="money" size={18} color="#fff" style={styles.portfolioValueIcons}/>
-                        <Text style={styles.portfolioLabel}>Total USD </Text>
+                        <Text style={[styles.portfolioLabel,{fontSize: width/27}]}>Total USD </Text>
                         </View>
-                        <Text style={styles.portfolioValue}>${(this.state.totalBtcPortfolio * this.state.btcPrice).toFixed(2)}</Text>
+                        <Text style={[styles.portfolioValue,{fontSize: width/12}]}>${(this.state.totalBtcPortfolio * this.state.btcPrice).toFixed(2)}</Text>
                     </View>
                 </View>
 
@@ -284,20 +284,21 @@ const styles = {
         fontWeight:'bold',
     },   
     portfolioValueIcons: {
-        marginRight: 5,
+        marginRight: 4,
     },
     portfolioLabel: {
         textAlign: 'center',
-        fontSize: 16,
         fontWeight: '100',
         color: '#ffffff',
     },    
     portfolioValue: {
         textAlign: 'center',
-        fontSize: 35,
         fontWeight: 'bold',
         color: '#ffffff'
-    }, 
+    },
+    innerContainer: {
+        flexDirection: 'row'
+    },
     innerPortfolioValueContainer: {
         padding: 8,
         alignItems: 'flex-start',
