@@ -67,17 +67,6 @@ export default class Dashboard extends Component{
         return await this.getBtcValue();
     }
 
-	getCurrencies() {
-		return new Promise(resolve=> {
-			pub.getCurrencies()
-				.then(response=>resolve(response.result))
-				.catch( err=> console.log(err))
-		})
-	}
-	async queryCurrencies() {
-		return await this.getCurrencies();
-	}
-
     getMarketSummaries() {
         /*
          * Get the whole market with one API call then filter it in compute balances
@@ -95,14 +84,11 @@ export default class Dashboard extends Component{
 
         return new Promise( async resolve => {
             let marketSummaries =  await this.getMarketSummaries();
-			let currencies = await this.getCurrencies();
 
             balances.forEach( (balance, index) => {
 				
-				let currencyInfo = currencies.find(currency=> currency.Currency === balance.Currency)
 				let marketName = (balance.Currency === 'USDT' || balance.Currency === 'BTC') ? 'USDT-BTC' : 'BTC-'+ balance.Currency ; ;
                 let holdings = balance.Available; 
-                // let icon = cryptoIcons[balance.Currency];
 
                 // search for the coin in the market summary
                 let coinMarket = marketSummaries.find( market => market.MarketName === marketName);
@@ -117,7 +103,8 @@ export default class Dashboard extends Component{
                     usdTotalValue = btcTotalValue * btcPrice;
                 }
 				
-				let coin = this.state.coinList.Data[balance.Currency]
+                let coin = this.state.coinList.Data[balance.Currency]
+                
 				let icon = {
 					uri : `${this.state.coinList.BaseImageUrl}${coin.ImageUrl}`
 				}
@@ -131,13 +118,10 @@ export default class Dashboard extends Component{
 					price: coinMarket.Last,
 					btcPrice: btcTotalValue,
 					usdValue: usdTotalValue,
-					longname: currencyInfo.CurrencyLong, 
+					longname: coin.CoinName, 
 					icon: icon
 				});
-                // if(counter === balances.length-1) {
-                //
-                // }
-                // counter++;
+                
             });
 
             resolve(data)
