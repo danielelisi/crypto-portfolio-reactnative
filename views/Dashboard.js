@@ -67,17 +67,6 @@ export default class Dashboard extends Component{
         return await this.getBtcValue();
     }
 
-	getCurrencies() {
-		return new Promise(resolve=> {
-			pub.getCurrencies()
-				.then(response=>resolve(response.result))
-				.catch( err=> console.log(err))
-		})
-	}
-	async queryCurrencies() {
-		return await this.getCurrencies();
-	}
-
     getMarketSummaries() {
         /*
          * Get the whole market with one API call then filter it in compute balances
@@ -95,14 +84,11 @@ export default class Dashboard extends Component{
 
         return new Promise( async resolve => {
             let marketSummaries =  await this.getMarketSummaries();
-			let currencies = await this.getCurrencies();
 
             balances.forEach( (balance, index) => {
 				
-				let currencyInfo = currencies.find(currency=> currency.Currency === balance.Currency)
 				let marketName = (balance.Currency === 'USDT' || balance.Currency === 'BTC') ? 'USDT-BTC' : 'BTC-'+ balance.Currency ; ;
                 let holdings = balance.Available; 
-                // let icon = cryptoIcons[balance.Currency];
 
                 // search for the coin in the market summary
                 let coinMarket = marketSummaries.find( market => market.MarketName === marketName);
@@ -117,7 +103,8 @@ export default class Dashboard extends Component{
                     usdTotalValue = btcTotalValue * btcPrice;
                 }
 				
-				let coin = this.state.coinList.Data[balance.Currency]
+                let coin = this.state.coinList.Data[balance.Currency]
+                
 				let icon = {
 					uri : `${this.state.coinList.BaseImageUrl}${coin.ImageUrl}`
 				}
@@ -131,13 +118,10 @@ export default class Dashboard extends Component{
 					price: coinMarket.Last,
 					btcPrice: btcTotalValue,
 					usdValue: usdTotalValue,
-					longname: currencyInfo.CurrencyLong, 
+					longname: coin.CoinName, 
 					icon: icon
 				});
-                // if(counter === balances.length-1) {
-                //
-                // }
-                // counter++;
+                
             });
 
             resolve(data)
@@ -148,7 +132,7 @@ export default class Dashboard extends Component{
 
 		let btcPrice = await this.queryBtcValue();
 		let coinList = await bitcoin.getCoinList()
-		
+
 
         this.setState({
 			btcPrice,
@@ -243,18 +227,18 @@ export default class Dashboard extends Component{
             <View style={styles.container} >
                 <View style={styles.outerPortfolioValueContainer}>
                     <View style={styles.innerPortfolioValueContainer}>
-                        <View style={styles.innerContainer}>
-                        <Zocial name="bitcoin" size={18} color="#fff" style={styles.portfolioValueIcons}/>
-                        <Text style={styles.portfolioLabel}>Total BTC </Text>
+                        <View style={[styles.innerContainer, {paddingBottom:0}]}>
+                        <Zocial name="bitcoin" size={15} color="#fff" style={styles.portfolioValueIcons}/>
+                        <Text style={[styles.portfolioLabel,{fontSize: width/27}]}>Total BTC </Text>
                         </View>
-                        <Text style={styles.portfolioValue}>{this.state.totalBtcPortfolio.toFixed(8)}</Text>
+                        <Text style={[styles.portfolioValue, {fontSize: width/12}]}>{this.state.totalBtcPortfolio.toFixed(8)}</Text>
                     </View>
                     <View style={styles.innerPortfolioValueContainer}>
                         <View style={styles.innerContainer}>
                         <FAIcon name="money" size={18} color="#fff" style={styles.portfolioValueIcons}/>
-                        <Text style={styles.portfolioLabel}>Total USD </Text>
+                        <Text style={[styles.portfolioLabel,{fontSize: width/27}]}>Total USD </Text>
                         </View>
-                        <Text style={styles.portfolioValue}>${(this.state.totalBtcPortfolio * this.state.btcPrice).toFixed(2)}</Text>
+                        <Text style={[styles.portfolioValue,{fontSize: width/12}]}>${(this.state.totalBtcPortfolio * this.state.btcPrice).toFixed(2)}</Text>
                     </View>
                 </View>
 
@@ -300,20 +284,21 @@ const styles = {
         fontWeight:'bold',
     },   
     portfolioValueIcons: {
-        marginRight: 5,
+        marginRight: 4,
     },
     portfolioLabel: {
         textAlign: 'center',
-        fontSize: 16,
         fontWeight: '100',
         color: '#ffffff',
     },    
     portfolioValue: {
         textAlign: 'center',
-        fontSize: 35,
         fontWeight: 'bold',
         color: '#ffffff'
-    }, 
+    },
+    innerContainer: {
+        flexDirection: 'row'
+    },
     innerPortfolioValueContainer: {
         padding: 8,
         alignItems: 'flex-start',

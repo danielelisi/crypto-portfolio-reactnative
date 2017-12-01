@@ -12,7 +12,7 @@
     "splash": {
       "image": "./assets/loading_screen.gif",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#191919"
     },
     "packagerOpts": {
       "assetExts": ["ttf", "mp4"]

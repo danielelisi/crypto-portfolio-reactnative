@@ -53,10 +53,11 @@ class Pie extends React.Component {
       highlightedIndex: 0, 
       pieLayoutHeight: 0,
       pieLayoutWidth: 0,
-      total: total
+      total: total,
+      pieRadius: 0
     };
 
-    const margin = 20;
+    this.margin = 20;
 
     this._createPieChart = this._createPieChart.bind(this);
     // this._value = this._value.bind(this);
@@ -66,7 +67,7 @@ class Pie extends React.Component {
 
     this.pieLayout = this.pieLayout.bind(this); 
     //adjust the pie dimensions based on other properties
-    this.pieRadius = Math.floor((this.props.width - this.props.highlightExpand * 2 - margin * 2)/2);  
+    // this.pieRadius = Math.floor((this.props.width - this.props.highlightExpand * 2 - margin * 2)/2);  
     // this.pieHeight = this.props.height / 2; //pie takes half of the screen 
   } 
 
@@ -91,19 +92,19 @@ class Pie extends React.Component {
 
   _createPieChart(index) {
  
-    const innerRadius = this.pieRadius - this.props.thickness
+    const innerRadius = this.state.pieRadius - this.props.thickness
 
     var arcs = d3.shape.pie()
         .value(this.props.valueAccessor)
         (this.props.data);
 
     var hightlightedArc = d3.shape.arc()
-      .outerRadius(this.pieRadius + this.props.highlightExpand) 
+      .outerRadius(this.state.pieRadius + this.props.highlightExpand) 
       .padAngle(.02)
       .innerRadius(innerRadius);  
 
     var arc = d3.shape.arc()
-      .outerRadius(this.pieRadius)
+      .outerRadius(this.state.pieRadius)
       .padAngle(.02)
       .innerRadius(innerRadius);
 
@@ -123,10 +124,14 @@ class Pie extends React.Component {
 
   pieLayout(event) {
     let {width, height} = event.nativeEvent.layout
+
+    let minSize = Math.min(width,height);
+
     console.log('changing layout')
     this.setState({
       pieLayoutWidth: width,
-      pieLayoutHeight: height
+      pieLayoutHeight: height,
+      pieRadius: Math.floor((minSize - this.props.highlightExpand * 2 - this.margin * 2)/2)
     }, ()=> console.log(this.state.pieLayoutHeight+ ' ' + this.state.pieLayoutWidth))
   }
   render() { 
@@ -136,7 +141,7 @@ class Pie extends React.Component {
     const y = Math.floor(this.state.pieLayoutHeight / 2) ;   
     const item = this.props.data[this.state.highlightedIndex]
     const percentage = this.props.valueAccessor(item) / this.state.total*100;
-    const circleDiameter = (this.pieRadius - this.props.thickness)*2
+    const circleDiameter = (this.state.pieRadius - this.props.thickness)*2
 
     return ( 
       
