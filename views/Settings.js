@@ -5,15 +5,19 @@ import {
     TextInput,
     Text,
     Button,
-    StyleSheet
+    StyleSheet,
+    Dimensions
 } from 'react-native';
+
+import creds from '../api/bittrex/creds';
 
 export default class Settings extends Component {
     constructor() {
         super();
         this.state = {
-            bittrexPublicAPI: null,
-            bittrexSecretAPI: null
+            bittrexPublicAPI: creds.API_KEY,
+            bittrexSecretAPI: creds.API_SECRET,
+            secureSecret: true
         }
     }
 
@@ -35,27 +39,46 @@ export default class Settings extends Component {
         AsyncStorage.getItem('bittrexSecretKey')
             .then( result => console.log(result))
             .catch( error => console.log(error));
+
+        this.setState({
+            secureSecret: !this.state.secureSecret
+        })
     };
 
     render() {
         return(
             <View style={styles.container}>
-                <TextInput
-                    style={styles.inputText}
-                    placeholder='Public API Key'
-                    value={this.state.bittrexPublicAPI}
-                    returnKeyType='next'
-                    onChangeText={(bittrexPublicAPI) => this.setState({bittrexPublicAPI})}
-                />
-                <TextInput
-                    placeholder='Secret API Key'
-                    value={this.state.bittrexSecretAPI}
-                    returnKeyType='done'
-                    onChangeText={(bittrexSecretAPI) => this.setState({bittrexSecretAPI})}
-                />
-                <Button title='Save Bittrex API Keys' onPress={this._saveBittrexKeys}/>
-                <Button title='Show Bittrex API Keys' onPress={this._showBittrexKeys}/>
-
+                <View style={styles.textContainer}>
+                    <TextInput
+                        style={styles.inputText}
+                        placeholder='Public API Key'
+                        value={this.state.bittrexPublicAPI}
+                        returnKeyType='next'
+                        onChangeText={(bittrexPublicAPI) => this.setState({bittrexPublicAPI})}
+                    />
+                    <TextInput
+                        style={styles.inputText}
+                        placeholder='Secret API Key'
+                        value={this.state.bittrexSecretAPI}
+                        returnKeyType='done'
+                        onChangeText={(bittrexSecretAPI) => this.setState({bittrexSecretAPI})}
+                        secureTextEntry={this.state.secureSecret}
+                    />
+                </View>
+                <View style={styles.buttonContainer}>
+                    <View style={styles.buttonAPI}>
+                        <Button
+                            title='Save Bittrex API Keys'
+                            onPress={this._saveBittrexKeys}
+                        />
+                    </View>
+                    <View style={styles.buttonAPI}>
+                        <Button
+                            title='Show Bittrex API Keys'
+                            onPress={this._showBittrexKeys}
+                        />
+                    </View>
+                </View>
             </View>
         )
     }
@@ -64,10 +87,22 @@ export default class Settings extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: 'center',
+        marginTop: 24,
+    },
+    textContainer: {
+        flex:1,
         justifyContent: 'center'
     },
     inputText: {
-        flex:1
+        padding: 10,
+        margin: 20
+    },
+    buttonContainer: {
+        flex: 1,
+        justifyContent: 'center'
+    },
+    buttonAPI: {
+        margin: 10
     }
+
 });

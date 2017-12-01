@@ -19,10 +19,10 @@ export default class CardComponent extends Component{
 			<View 
 			style={[styles.container, {backgroundColor:this.props.color}]}>
 				<Text style={[styles.header,{fontSize:width/16}]}>{this.props.data.longname}</Text>
-				<View style={{flex: 1, flexDirection: 'row'}}>
-					<View style={{flex:1, justifyContent:'center', alignItems:'center', paddingLeft: 4,backgroundColor: 'rgba(0,0,0,0.5)'}}>
+				<View style={styles.metadataContainer}>
+					<View style={styles.metadataIcon}>
 						<Image 
-						source={data.icon} resizeMode={'contain'} style={{height:width/5, width:width/5,borderRadius:width/10}}
+						    source={data.icon} resizeMode={'contain'} style={{height:width/5, width:width/5,borderRadius:width/10}}
 						/>
 					</View> 
 					<View style={styles.info}>
@@ -31,16 +31,16 @@ export default class CardComponent extends Component{
                             <Text style={[styles.infoText,{fontSize:width/27}]}>{data.holdings.toFixed(6)} {data.currency}</Text>
                         </View>
                         <View style={styles.infoContainer}>
-                            <Text style={[styles.infoLabel,{fontSize:width/30}]}>Price </Text>
-                            <Text style={[styles.infoText,{fontSize:width/27}]}>{data.price.toFixed(6)} BTC</Text>
-                        </View>
-                        <View style={styles.infoContainer}>
                             <Text style={[styles.infoLabel,{fontSize:width/30}]}>BTC Value </Text>
                             <Text style={[styles.infoText,{fontSize:width/27}]}>{data.btcPrice.toFixed(6)} BTC</Text>
                         </View>
                         <View style={styles.infoContainer}>
                             <Text style={[styles.infoLabel,{fontSize:width/30}]}>USD Value </Text>
                             <Text style={[styles.infoText,{fontSize:width/27}]}>${data.usdValue.toFixed(2)}</Text>
+                        </View>
+                        <View style={styles.infoContainer}>
+                            <Text style={[styles.infoLabel,{fontSize:width/30}]}>Market Price </Text>
+                            <Text style={[styles.infoText,{fontSize:width/27}]}>{data.price.toFixed(6)} BTC</Text>
                         </View>
                     </View>
 				</View>
@@ -54,26 +54,36 @@ const styles = StyleSheet.create({
 		flex: 1,
 		borderColor: 'white',
         borderRadius: 8,
-        overflow: 'hidden',
 		backgroundColor: 'white'
 
-},
+    },
 	header: {
 		fontWeight: 'bold',
 		padding: 5,
 		marginLeft: 10,
 		color: '#efeeee'
 	},
+    metadataContainer: {
+	    flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0,0,0,0.5)'
+    },
+    metadataIcon: {
+	    flex:1,
+        justifyContent:'center',
+        alignItems:'center',
+    },
 	info: {
 		flex: 2,
-		paddingTop: 12,
-		alignItems: 'flex-start',
-        backgroundColor: 'rgba(0,0,0,0.5)'
+        alignItems:'flex-start',
+        justifyContent:'center'
+
 	},
     infoContainer: {
 	    flexDirection: 'row',
-        justifyContent: 'space-between',
-        padding: 5
+        justifyContent: 'space-between'
     },
 	infoText: {
 		color: '#fff',
