@@ -6,6 +6,7 @@ import TwitterNews from './views/TwitterNews';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Settings from './views/Settings';
 
+
 import { DrawerNavigator } from 'react-navigation';
 
 
@@ -17,13 +18,13 @@ const RootNavigator = DrawerNavigator(
                 navigationOptions: {
                     drawerLabel: 'Home',
                     drawerIcon: <Entypo name="home" size={30} color="#fff"></Entypo>
-
                 }
             },
         TwitterNews:
             {
                 screen: TwitterNews,
                 navigationOptions: {
+
                     drawerLabel: 'News',
                     drawerIcon: <Entypo name="twitter" size={30} color="#fff"></Entypo>
 
