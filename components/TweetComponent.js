@@ -3,8 +3,11 @@ import {
     View,
     Image,
     Text,
-    StyleSheet
+    StyleSheet,
+    Dimensions
 } from 'react-native';
+
+const {width, height} = Dimensions.get('screen');
 
 export default class TweetComponent extends Component {
     constructor(props) {
@@ -17,17 +20,16 @@ export default class TweetComponent extends Component {
 
         return(
             <View style={styles.tweetContainer}>
-
                 <View style={styles.profileContainer}>
                     <Image
                         source={{uri: tweet.user.profile_image_url_https}}
                         style={styles.profileImage}
                     />
-                    <Text>{tweet.user.name}</Text>
                 </View>
 
                 <View style={styles.textContainer}>
-                    <Text>{tweet.text}</Text>
+                    <Text style={styles.username}>{tweet.user.name}</Text>
+                    <Text style={styles.tweet}>{tweet.text}</Text>
                 </View>
                 
             </View>
@@ -41,24 +43,35 @@ const styles = StyleSheet.create({
         flex: 1,
         margin: 8,
         paddingVertical: 8,
-        backgroundColor: '#c3c3c3',
-        borderRadius: 10,
+        backgroundColor: 'rgba(255,255,255,0.5)',
+        borderRadius: 5,
         flexDirection: 'row',
-        alignItems: 'center',
+        alignItems: 'center'
+    },
+    username:{
+        paddingTop:5,
+        fontWeight:'bold'
+    },
+    tweet: {
+        paddingTop:1,
+        paddingBottom: 4
     },
     profileContainer: {
         flex: 1,
         alignItems: 'center',
-        padding: 4
+        paddingTop: 4,
+        paddingBottom: 4
 
     },
     profileImage: {
-        width: 50,
-        height: 50,
-        borderRadius: 25
+        width: 70,
+        height: 70,
+        borderRadius: 35
     },
     textContainer: {
-        flex: 2,
-        paddingHorizontal: 4
+        flex: 3,
+        paddingLeft: 1,
+        paddingHorizontal: 6,
+        flexDirection:'column'
     }
 });

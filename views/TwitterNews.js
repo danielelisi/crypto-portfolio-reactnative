@@ -10,7 +10,8 @@ import DropdownAlert from 'react-native-dropdownalert';
 import twitter from 'react-native-twitter';
 import twitterCredentials from '../api/twitter/credentials';
 import TweetComponent from "../components/TweetComponent";
-import { Accelerometer } from 'expo'
+import { Accelerometer } from 'expo';
+import Entypo from 'react-native-vector-icons/Entypo';
 
 export default class TwitterNews extends Component {
     constructor() {
@@ -149,6 +150,9 @@ export default class TwitterNews extends Component {
             <View
                 style={styles.twitterContainer}
             >
+                <View style={styles.pageHeader}>
+                    <Entypo name="twitter" size={25} color="#1da1f2"></Entypo>
+                </View>
                 <ScrollView>
                     {this.state.twitterData !== null
                         ? this.renderTweets()
@@ -173,6 +177,13 @@ export default class TwitterNews extends Component {
 const styles = StyleSheet.create({
     twitterContainer: {
         flex: 1,
-        marginTop: 24
-    }
+        marginTop: 24,
+        backgroundColor: '#191919'
+    },
+    pageHeader : {
+        paddingTop: 10,
+        alignItems: 'center',
+        paddingBottom: 10,
+        backgroundColor:'black'
+    },
 });
