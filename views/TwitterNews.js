@@ -145,6 +145,10 @@ export default class TwitterNews extends Component {
             .catch(err => console.log('Error:' + err))
     }
 
+    componentWillUnmount() {
+        this._unsubscribe();
+    }
+
     render() {
         return(
             <View
