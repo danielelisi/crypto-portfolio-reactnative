@@ -22,7 +22,7 @@ import * as market from '../api/bittrex/market'
 import * as pub from '../api/bittrex/public'
 import * as bitcoin from '../api/bittrex/bitcoin'
 import creds from '../api/bittrex/creds';
-// import cryptoIcons from '../assets/icons/cryptocurrency/icons'
+import DropdownAlert from 'react-native-dropdownalert';
 
 const {width, height} = Dimensions.get('screen');
 
@@ -92,7 +92,7 @@ export default class Dashboard extends Component{
 
                 // search for the coin in the market summary
                 let coinMarket = marketSummaries.find( market => market.MarketName === marketName);
-                console.log(coinMarket);
+                // console.log(coinMarket);
 
                 let btcTotalValue, usdTotalValue;
                 if(marketName === 'USDT-BTC') {
@@ -131,8 +131,21 @@ export default class Dashboard extends Component{
     async componentDidMount() {
 
 		let btcPrice = await this.queryBtcValue();
-		let coinList = await bitcoin.getCoinList()
+        let coinList = await bitcoin.getCoinList();
 
+        if(this.props.screenProps.justOpened) {
+            this.showAlert({
+                key: 0, 
+                backgroundColor: '#32A54A', 
+                type: 'info',
+                title: 'Navigation',
+                message: 'Swipe from the left edge of the screen to see menu',
+                closeInterval: 30000
+            })
+        }
+        
+
+        this.props.screenProps.didShow();
 
         this.setState({
 			btcPrice,
@@ -142,7 +155,7 @@ export default class Dashboard extends Component{
         account.getBalances(creds.API_KEY, creds.API_SECRET)
             .then( async (balancesList) => {
                 console.log('Dashboard Component Did Mount getBalances response:');
-                console.log(balancesList.result);
+                // console.log(balancesList.result);
                 let filteredBalances = balancesList.result.filter( coin => coin.Available > 0);
                 let coinsData = await this.computeBalances(filteredBalances, btcPrice);
                 this.setState(
@@ -220,25 +233,55 @@ export default class Dashboard extends Component{
     }
 
     /*************************************
+     * ALERT RELATED FUNCTIONS
+     *************************************/
+
+    showAlert(item) {
+        if (item.type == 'close') {
+          this.closeAlert()
+        } else {
+          const title = item.title
+          this.dropdown.alertWithType(item.type, title, item.message)
+        }
+      }
+    closeAlert = () => {
+        this.dropdown.close()
+      }
+    onClose(data) {
+        console.log(data);
+      }
+
+    /*************************************
      * RENDER STARTS HERE
      ************************************/
     render() {
         return (
             <View style={styles.container} >
+                
+                <DropdownAlert
+                  ref={(ref) => this.dropdown = ref}
+                  containerStyle={{
+                    backgroundColor: '#2B73B6'
+                  }}
+                  showCancel={true}
+                  onClose={(data) => this.onClose(data)}
+                  onCancel={(data) => this.onClose(data)}
+                />
+
                 <View style={styles.outerPortfolioValueContainer}>
                     <View style={styles.innerPortfolioValueContainer}>
                         <View style={[styles.innerContainer, {paddingBottom:0}]}>
                         <Zocial name="bitcoin" size={15} color="#fff" style={styles.portfolioValueIcons}/>
                         <Text style={[styles.portfolioLabel,{fontSize: width/27}]}>Total BTC </Text>
                         </View>
-                        <Text style={[styles.portfolioValue, {fontSize: width/12}]}>{this.state.totalBtcPortfolio.toFixed(8)}</Text>
+                        <Text style={[styles.portfolioValue, {fontSize: width/12, color:'#FFA500'}]}>{this.state.totalBtcPortfolio.toFixed(8)}</Text>
                     </View>
                     <View style={styles.innerPortfolioValueContainer}>
                         <View style={styles.innerContainer}>
                         <FAIcon name="money" size={18} color="#fff" style={styles.portfolioValueIcons}/>
                         <Text style={[styles.portfolioLabel,{fontSize: width/27}]}>Total USD </Text>
                         </View>
-                        <Text style={[styles.portfolioValue,{fontSize: width/12}]}>${(this.state.totalBtcPortfolio * this.state.btcPrice).toFixed(2)}</Text>
+                        <Text style={[styles.portfolioValue,{fontSize: width/12, color: '#00FF00'}]}>${(this.state.totalBtcPortfolio * this.state.btcPrice).toFixed(2)}</Text>
                     </View>
                 </View>
 
