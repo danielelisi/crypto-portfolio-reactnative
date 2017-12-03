@@ -114,7 +114,7 @@ class Pie extends React.Component {
     var arcData = arcs[index];
     var path = (this.state.highlightedIndex == index) ? hightlightedArc(arcData) : arc(arcData);
 
-    return {
+    return { 
       path,
       color: this._color(index),
     };
