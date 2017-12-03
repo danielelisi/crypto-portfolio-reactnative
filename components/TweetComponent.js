@@ -15,6 +15,52 @@ export default class TweetComponent extends Component {
 
     }
 
+    formatDate(input) {
+
+        let date = input.substring(4,10)+ ' ' + input.substring(26, 30) + ' ';
+        let time = input.substring(11,19);
+        let day = input.substring(0,4);
+
+        return (
+            <Text style={styles.tweetSmall}>
+                {day}
+                <Text>{date}</Text>
+                <Text>{time}</Text>
+            </Text>
+        )
+    }
+
+    tweetHighlight(text, key) {
+        return (
+            <Text key={key} style={{color:'#00aced'}}>{text+ ' '}</Text>
+        )
+    }
+
+    viewTweetText(words) {
+        return words.map((elem,i) =>  
+            {
+                elem = elem.trim();
+                let result = elem+' ';
+                if (elem[0]==='#') result = this.tweetHighlight(elem,i);
+                
+                return result;
+            }
+        )
+    }
+
+    parseTweet(text) {
+
+        let words = text.replace( /\n/g, " " ).split( " " );
+
+        return (
+            <Text style={styles.tweet}>
+                {
+                    this.viewTweetText(words)    
+                } 
+            </Text> 
+        )
+    }
+
     render() {
         let {tweet} = this.props;
 
@@ -28,8 +74,14 @@ export default class TweetComponent extends Component {
                 </View>
 
                 <View style={styles.textContainer}>
-                    <Text style={[styles.username, {fontSize:width/25}]}>{tweet.user.name}</Text>
-                    <Text style={styles.tweet}>{tweet.text}</Text>
+                    <Text style={styles.username}>
+                        {tweet.user.name + ' '}
+                        <Text style={styles.tweetSmall}>@{tweet.user.screen_name}</Text>
+                    </Text>
+                    {this.parseTweet(tweet.text)}
+                    <Text>
+                        { this.formatDate(tweet.created_at)} 
+                    </Text>
                 </View>
                 
             </View>
@@ -41,37 +93,40 @@ export default class TweetComponent extends Component {
 const styles = StyleSheet.create({
     tweetContainer: {
         flex: 1,
-        margin: 8,
-        paddingVertical: 8,
         backgroundColor: '#F0F0F2',
-        borderRadius: 8,
         flexDirection: 'row',
-        alignItems: 'center',
-        borderColor: 'rgba(0,0,0,0.5)',
-        borderWidth: 2
+        borderBottomColor: 'rgba(0,0,0,0.5)',
+        borderBottomWidth: 2,
+        paddingBottom: 5, 
+        paddingTop: 5
+    },
+    tweetSmall: {
+        fontStyle: 'italic',
+        color: 'gray',
+        fontSize: width/30,
+        fontWeight: 'normal'
     },
     username:{
-        paddingTop:5,
-        fontWeight:'bold'
+        paddingTop:5, 
+        fontWeight:'bold' 
     },
-    tweet: {
+    tweet: { 
         paddingTop:1,
-        paddingBottom: 4
+        paddingBottom: 4 
     },
     profileContainer: {
-        flex: 1,
+        flex: 1, 
+        flexDirection: 'column',
         alignItems: 'center',
-        paddingTop: 4,
+        paddingTop: 4, 
         paddingBottom: 4
-
     },
-    profileImage: {
-        width: 70,
-        height: 70,
-        borderRadius: 35,
+    profileImage: { 
+        width: 48,
+        height: 48 
     },
     textContainer: {
-        flex: 3,
+        flex: 4,
         paddingLeft: 1,
         paddingHorizontal: 6,
         flexDirection:'column'

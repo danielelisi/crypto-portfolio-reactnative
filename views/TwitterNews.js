@@ -151,29 +151,34 @@ export default class TwitterNews extends Component {
 
     render() {
         return(
-            <View
-                style={styles.twitterContainer}
-            >
-                <View style={styles.pageHeader}>
+            <View style={{flex:1, marginTop: 24}}> 
+                <View style={styles.pageHeader}> 
                     <Entypo name="twitter" size={35} color="#1da1f2"></Entypo>
                 </View>
-                <ScrollView>
-                    {this.state.twitterData !== null
-                        ? this.renderTweets()
-                        : <ActivityIndicator />
+                <View
+                    style={styles.twitterContainer}
+                >
+                    
+                    {this.state.twitterData === null && <ActivityIndicator color={'green'} size={'large'}/>}
+                    {this.state.twitterData !== null &&
+                        <ScrollView>
+                            {this.renderTweets()}
+                        </ScrollView>
                     }
-                </ScrollView>
+                    
 
-                <DropdownAlert
-                  ref={(ref) => this.dropdown = ref}
-                  containerStyle={{
-                    backgroundColor: '#2B73B6'
-                  }}
-                  showCancel={true}
-                  onClose={(data) => this.onClose(data)}
-                  onCancel={(data) => this.onClose(data)}
-                />
+                    <DropdownAlert
+                    ref={(ref) => this.dropdown = ref}
+                    containerStyle={{
+                        backgroundColor: '#2B73B6'
+                    }}
+                    showCancel={true}
+                    onClose={(data) => this.onClose(data)}
+                    onCancel={(data) => this.onClose(data)}
+                    />
+                </View> 
             </View>
+            
         )
     }
 }
@@ -181,13 +186,13 @@ export default class TwitterNews extends Component {
 const styles = StyleSheet.create({
     twitterContainer: {
         flex: 1,
-        marginTop: 24,
-        backgroundColor: '#191919'
+        backgroundColor: '#191919',
+        justifyContent: 'center'
     },
     pageHeader : {
-        paddingTop: 15,
         alignItems: 'center',
         paddingBottom: 15,
-        backgroundColor:'black'
+        backgroundColor:'black', 
+        paddingTop: 15
     },
 });
