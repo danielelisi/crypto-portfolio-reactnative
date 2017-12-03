@@ -8,6 +8,8 @@ import {
   View,
   ART,
   Dimensions,
+  Animated,
+  Easing
 } from 'react-native';
 
 const {
@@ -54,7 +56,8 @@ class Pie extends React.Component {
       pieLayoutHeight: 0,
       pieLayoutWidth: 0,
       total: total,
-      pieRadius: 0
+      pieRadius: 0,
+      fadeAnim: new Animated.Value(0)
     };
 
     this.margin = 20;
@@ -134,6 +137,17 @@ class Pie extends React.Component {
       pieRadius: Math.floor((minSize - this.props.highlightExpand * 2 - this.margin * 2)/2)
     }, ()=> console.log(this.state.pieLayoutHeight+ ' ' + this.state.pieLayoutWidth))
   }
+
+  componentDidMount() {
+    Animated.timing(
+      this.state.fadeAnim, {
+        toValue: 1,
+        duration: 1000,
+        easing: Easing.linear
+      }
+    ).start()
+  }
+
   render() { 
 
     const pieMargin = styles.pieContainer.margin; 
@@ -142,32 +156,38 @@ class Pie extends React.Component {
     const item = this.props.data[this.state.highlightedIndex]
     const percentage = this.props.valueAccessor(item) / this.state.total*100;
     const circleDiameter = (this.state.pieRadius - this.props.thickness)*2
+    
+    let {fadeAnim} = this.state;
 
     return ( 
       
       <View style={styles.container}> 
         <View style={styles.pieContainer} onLayout={this.pieLayout}>
-        <View style={[styles.innerView, 
-          {width: circleDiameter, height: circleDiameter, borderRadius:circleDiameter/2, 
-          backgroundColor:this._color(this.state.highlightedIndex)}]}>
-          <Text style={styles.innerTextLarge}>{percentage.toFixed(0)}</Text>
-          <Text style={styles.innerTextSmall}>PERCENT</Text>
-        </View>
-        <Surface width={this.state.pieLayoutWidth} height={this.state.pieLayoutHeight}>   
-            { this.state.pieLayoutWidth !== 0 && 
-              <Group x={x} y={y}> 
-              {  
-                  this.props.data.map( (item, index) => 
-                    (<AnimShape 
-                      key={'pie_shape_' + index}
-                      color={this._color(index)}
-                      d={ () => this._createPieChart(index)}
-                    />)
-                  ) 
-                }
-              </Group>
-            }
-          </Surface> 
+          <Animated.View style={[styles.pieAnimatedView, {opacity:fadeAnim}]}>
+            <View style={[styles.innerView, 
+              {width: circleDiameter, height: circleDiameter, borderRadius:circleDiameter/2, 
+              backgroundColor:this._color(this.state.highlightedIndex)}]}>
+              <Text style={styles.innerTextSmall}>HOLDINGS</Text>
+              <Text style={styles.innerTextLarge}>{percentage.toFixed(0)}</Text>
+              <Text style={styles.innerTextSmall}>PERCENT</Text>
+            </View>
+            <Surface width={this.state.pieLayoutWidth} height={this.state.pieLayoutHeight}>   
+              { this.state.pieLayoutWidth !== 0 && 
+                <Group x={x} y={y}> 
+                {  
+                    this.props.data.map( (item, index) => 
+                      (<AnimShape 
+                        key={'pie_shape_' + index}
+                        color={this._color(index)}
+                        d={ () => this._createPieChart(index)}
+                      />)
+                    ) 
+                  }
+                </Group>
+              }
+            </Surface>
+          </Animated.View>
+         
         </View>
         <View style={styles.pieInfo}> 
           {this.props.renderListCallback(this.props.data, this._onPieItemSelected)}  
@@ -189,6 +209,9 @@ const styles = {
   },  
   pieContainer: { 
     flex: 2,
+    
+  },
+  pieAnimatedView: {
     justifyContent: 'center',
     alignItems: 'center'
   },

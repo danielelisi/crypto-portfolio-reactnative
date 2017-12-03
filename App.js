@@ -62,7 +62,22 @@ const RootNavigator = DrawerNavigator(
 
 export default class App extends React.Component {
 
+    constructor() {
+        super();
+        this.state = {
+            justOpened: true
+        }
+
+        this.appDidShow = this.appDidShow.bind(this)
+    }
+
+    appDidShow = () => {
+        this.setState({
+            justOpened: false
+        })
+    }
+   
     render() {
-        return <RootNavigator style={{backgroundColor:'#191919'}}/>
+        return <RootNavigator style={{backgroundColor:'#191919'}} screenProps={{justOpened:this.state.justOpened, didShow: this.appDidShow}}/>
     }
 }
