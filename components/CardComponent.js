@@ -54,7 +54,8 @@ const styles = StyleSheet.create({
 		flex: 1,
 		borderColor: 'white',
         borderRadius: 8,
-		backgroundColor: 'white'
+		backgroundColor: 'white',
+        overflow: 'hidden'
 
     },
 	header: {
@@ -83,7 +84,8 @@ const styles = StyleSheet.create({
 	},
     infoContainer: {
 	    flexDirection: 'row',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        padding: 5
     },
 	infoText: {
 		color: '#fff',
