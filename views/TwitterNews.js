@@ -165,18 +165,16 @@ export default class TwitterNews extends Component {
                             {this.renderTweets()}
                         </ScrollView>
                     }
-                    
-
-                    <DropdownAlert
-                    ref={(ref) => this.dropdown = ref}
-                    containerStyle={{
-                        backgroundColor: '#2B73B6'
-                    }}
-                    showCancel={true}
-                    onClose={(data) => this.onClose(data)}
-                    onCancel={(data) => this.onClose(data)}
-                    />
                 </View> 
+                <DropdownAlert
+                ref={(ref) => this.dropdown = ref}
+                containerStyle={{
+                    backgroundColor: '#2B73B6'
+                }}
+                showCancel={true}
+                onClose={(data) => this.onClose(data)}
+                onCancel={(data) => this.onClose(data)}
+                />
             </View>
             
         )
