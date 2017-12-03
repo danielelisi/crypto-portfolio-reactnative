@@ -155,7 +155,7 @@ export default class TwitterNews extends Component {
                 style={styles.twitterContainer}
             >
                 <View style={styles.pageHeader}>
-                    <Entypo name="twitter" size={25} color="#1da1f2"></Entypo>
+                    <Entypo name="twitter" size={35} color="#1da1f2"></Entypo>
                 </View>
                 <ScrollView>
                     {this.state.twitterData !== null
@@ -185,9 +185,9 @@ const styles = StyleSheet.create({
         backgroundColor: '#191919'
     },
     pageHeader : {
-        paddingTop: 10,
+        paddingTop: 15,
         alignItems: 'center',
-        paddingBottom: 10,
+        paddingBottom: 15,
         backgroundColor:'black'
     },
 });

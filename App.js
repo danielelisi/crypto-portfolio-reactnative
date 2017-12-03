@@ -4,6 +4,7 @@ import Dashboard from './views/Dashboard.js';
 import TestComponent from './components/TestComponent';
 import TwitterNews from './views/TwitterNews';
 import Entypo from 'react-native-vector-icons/Entypo';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import Settings from './views/Settings';
 
 
@@ -34,8 +35,8 @@ const RootNavigator = DrawerNavigator(
             {
                 screen: Settings,
                 navigationOptions: {
-                    drawerLabel: 'Settings'
-
+                    drawerLabel: 'Settings',
+                    drawerIcon: <Ionicons name="ios-settings" size={30} color="#fff"></Ionicons>
                 }
             }
     },

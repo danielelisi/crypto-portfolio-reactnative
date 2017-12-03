@@ -28,7 +28,7 @@ export default class TweetComponent extends Component {
                 </View>
 
                 <View style={styles.textContainer}>
-                    <Text style={styles.username}>{tweet.user.name}</Text>
+                    <Text style={[styles.username, {fontSize:width/25}]}>{tweet.user.name}</Text>
                     <Text style={styles.tweet}>{tweet.text}</Text>
                 </View>
                 
@@ -43,10 +43,12 @@ const styles = StyleSheet.create({
         flex: 1,
         margin: 8,
         paddingVertical: 8,
-        backgroundColor: 'rgba(255,255,255,0.5)',
-        borderRadius: 5,
+        backgroundColor: '#F0F0F2',
+        borderRadius: 8,
         flexDirection: 'row',
-        alignItems: 'center'
+        alignItems: 'center',
+        borderColor: 'rgba(0,0,0,0.5)',
+        borderWidth: 2
     },
     username:{
         paddingTop:5,
@@ -66,7 +68,7 @@ const styles = StyleSheet.create({
     profileImage: {
         width: 70,
         height: 70,
-        borderRadius: 35
+        borderRadius: 35,
     },
     textContainer: {
         flex: 3,
