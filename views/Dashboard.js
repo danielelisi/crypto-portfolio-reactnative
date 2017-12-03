@@ -257,16 +257,6 @@ export default class Dashboard extends Component{
     render() {
         return (
             <View style={styles.container} >
-                
-                <DropdownAlert
-                  ref={(ref) => this.dropdown = ref}
-                  containerStyle={{
-                    backgroundColor: '#2B73B6'
-                  }}
-                  showCancel={true}
-                  onClose={(data) => this.onClose(data)}
-                  onCancel={(data) => this.onClose(data)}
-                />
 
                 <View style={styles.outerPortfolioValueContainer}>
                     <View style={styles.innerPortfolioValueContainer}>
@@ -300,6 +290,16 @@ export default class Dashboard extends Component{
                         valueAccessor={this.getValue} />
                     }
                 </View>
+
+                <DropdownAlert
+                    ref={(ref) => this.dropdown = ref}
+                    containerStyle={{
+                        backgroundColor: '#2B73B6'
+                    }}
+                    showCancel={true}
+                    onClose={(data) => this.onClose(data)}
+                    onCancel={(data) => this.onClose(data)}
+                />
             </View>
 
         )
