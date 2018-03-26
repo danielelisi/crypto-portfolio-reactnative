@@ -1,10 +1,12 @@
-# reactnative-magic
+# Cryptocurrency Portfolio
 
- - Feature 1: External API calls from within the react native app.
- - Feature 2: Digital recognition of any sort (image recognition, audio recognition, movement recognition).
- - Feature 3: Social media integration.
+A cryptocurrency portfolio that uses Bittrex API to fetch holdings from your account.
 
-# Setup Environment
+The app pulls the latest USD values for you coin and calculated you portfolio BTC and USD value.
 
-1. Run `npm install` to install all project dependecies.  
-2. Run `npx rn-nodeify --hack` which allows react-native to run node core modules. (needed for HMAC hash)
+The News section uses twitter to fetch the latests tweets regarding cryptocurrencies.
+
+
+**Demo:**
+
+![cryptocurrency-demo](https://media.giphy.com/media/5bmFmoVSelocRsDfZS/giphy.gif)
